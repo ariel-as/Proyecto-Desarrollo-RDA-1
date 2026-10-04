@@ -10,6 +10,25 @@ import { CLAVES, leerLocal, escribirLocal } from './storage.js';
 /** Cantidad máxima por producto para no cargar el formulario en exceso. */
 export const CANTIDAD_MAXIMA = 20;
 
+/**
+ * Un plan es una suscripción mensual a un solo plan, así que en un mismo
+ * pedido no se repite: quien necesite acceso para dos o tres personas ya
+ * tiene los planes de $60 y $85. Sin este tope, "Elegir plan" podía acumular
+ * hasta CANTIDAD_MAXIMA copias del mismo plan mientras el checkout registraba
+ * una sola suscripción, y el total del pedido no correspondía al precio mensual.
+ */
+export const CANTIDAD_MAXIMA_PLAN = 1;
+
+/** Indica si una línea del carrito es un plan (suscripción mensual). */
+export function esPlan(linea) {
+  return linea?.tipo === 'plan';
+}
+
+/** Unidades máximas que admite una línea del carrito según su tipo. */
+function maximoDe(linea) {
+  return esPlan(linea) ? CANTIDAD_MAXIMA_PLAN : CANTIDAD_MAXIMA;
+}
+
 /** Devuelve el carrito actual (o uno vacío si todavía no existe). */
 export function obtenerCarrito() {
   const carrito = leerLocal(CLAVES.carrito, []);
@@ -34,7 +53,7 @@ export function contarArticulos(carrito = obtenerCarrito()) {
 
 /**
  * Agrega un producto al carrito. Si ya existe, suma la cantidad
- * respetando la cantidad máxima permitida.
+ * respetando la cantidad máxima permitida para su tipo.
  * El identificador se compara sin coerción para que el carrito admita
  * tanto los ids numéricos de los productos como los de los planes
  * ("plan-1"), que de otro modo colisionarían entre sí.
@@ -44,7 +63,7 @@ export function agregarProducto(producto, cantidad = 1) {
   const existente = carrito.find((item) => item.id === producto.id);
 
   if (existente) {
-    existente.cantidad = Math.min(CANTIDAD_MAXIMA, existente.cantidad + cantidad);
+    existente.cantidad = Math.min(maximoDe(existente), existente.cantidad + cantidad);
   } else {
     carrito.push({
       id: producto.id,
@@ -52,7 +71,7 @@ export function agregarProducto(producto, cantidad = 1) {
       precio: Number(producto.precio),
       imagen: producto.imagen || '',
       tipo: producto.tipo || 'producto',
-      cantidad: Math.min(CANTIDAD_MAXIMA, Math.max(1, cantidad))
+      cantidad: Math.min(maximoDe(producto), Math.max(1, cantidad))
     });
   }
 
@@ -73,7 +92,7 @@ export function cambiarCantidad(id, cantidad) {
   const item = carrito.find((linea) => String(linea.id) === String(id));
   if (!item) return carrito;
 
-  const nuevaCantidad = Math.min(CANTIDAD_MAXIMA, Math.max(0, Number(cantidad) || 0));
+  const nuevaCantidad = Math.min(maximoDe(item), Math.max(0, Number(cantidad) || 0));
 
   if (nuevaCantidad === 0) {
     return eliminarProducto(id);

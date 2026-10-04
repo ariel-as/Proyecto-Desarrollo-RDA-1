@@ -130,7 +130,7 @@
               <label class="block font-semibold text-white" for="cedula">Cédula *</label>
               <input
                 class="mt-1 w-full rounded-lg border border-pf-linea p-2"
-                type="text" id="cedula" name="cedula" required pattern="^\d{10}$" inputmode="numeric"
+                type="text" id="cedula" name="cedula" required pattern="^\d{10}$" inputmode="numeric" autocomplete="off"
                 data-mensaje-patron="La cédula debe tener 10 dígitos."
                 aria-describedby="ayuda-cedula">
               <p id="ayuda-cedula" class="text-sm text-neutral-400">10 dígitos, sin letras ni guiones.</p>
@@ -140,7 +140,7 @@
               <label class="block font-semibold text-white" for="telefono">Teléfono *</label>
               <input
                 class="mt-1 w-full rounded-lg border border-pf-linea p-2"
-                type="tel" id="telefono" name="telefono" required pattern="^09\d{8}$" inputmode="numeric"
+                type="tel" id="telefono" name="telefono" required pattern="^09\d{8}$" inputmode="numeric" autocomplete="tel"
                 data-mensaje-patron="El teléfono debe tener 10 dígitos y empezar por 09."
                 aria-describedby="ayuda-telefono">
               <p id="ayuda-telefono" class="text-sm text-neutral-400">Ejemplo: 0991234567</p>

@@ -84,6 +84,32 @@ function iniciarAvisoCookies() {
 }
 
 /**
+ * Mantiene el foco dentro del panel del menú mientras está desplegado.
+ * El menú se superpone al contenido, así que si el foco se escapara al hero o
+ * al botón del carrito, quien navega con teclado leería controles que no ve
+ * (WCAG 2.2, 2.4.3). El botón que lo abre actúa como parte del panel, así que
+ * `Shift + Tab` desde el primer enlace vuelve a él en lugar de cerrarlo.
+ */
+function confinarFocoEnMenu(menu, boton, evento) {
+  const focusables = [
+    ...menu.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])')
+  ].filter((nodo) => nodo.offsetParent !== null || nodo === document.activeElement);
+
+  if (focusables.length === 0) return;
+
+  const primero = focusables[0];
+  const ultimo = focusables[focusables.length - 1];
+
+  if (evento.shiftKey && document.activeElement === primero) {
+    evento.preventDefault();
+    boton.focus();
+  } else if (!evento.shiftKey && document.activeElement === ultimo) {
+    evento.preventDefault();
+    primero.focus();
+  }
+}
+
+/**
  * Controla el menú desplegable de pantallas pequeñas.
  * El menú se muestra como un panel flotante bajo el encabezado: se superpone
  * al contenido con un borde redondeado y nunca empuja el resto de la página.
@@ -125,6 +151,12 @@ function iniciarMenuMovil() {
     if (evento.key === 'Escape' && estaAbierto()) {
       evento.preventDefault();
       cerrar({ devolverFoco: true });
+      return;
+    }
+
+    // Tab cicla entre el botón y los enlaces del menú, nunca hacia el fondo.
+    if (evento.key === 'Tab' && estaAbierto()) {
+      confinarFocoEnMenu(menu, boton, evento);
     }
   });
 

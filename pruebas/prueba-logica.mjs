@@ -56,6 +56,23 @@ comprobar(
   JSON.parse(localStorage.getItem('carrito')).length === 0
 );
 
+// Un plan es una suscripcion mensual: no se puede repetir en el mismo pedido.
+const plan = { id: 'plan-1', nombre: 'Plan individual', precio: 35, tipo: 'plan' };
+
+carrito.vaciar();
+carrito.agregar(plan, 1);
+carrito.agregar(plan, 1);
+carrito.agregar(plan, 1);
+comprobar('Un plan no se repite al elegirlo de nuevo', carrito.obtener()[0].cantidad === 1);
+comprobar('El total del plan es su precio mensual', carrito.total() === 35);
+
+carrito.cambiar('plan-1', 5);
+comprobar('La cantidad de un plan se limita a 1', carrito.obtener()[0].cantidad === 1);
+comprobar('El plan conserva su tipo', carrito.obtener()[0].tipo === 'plan');
+comprobar('Un producto y un plan conviven', (carrito.agregar(proteina, 2), carrito.contar() === 3));
+comprobar('El producto conserva su cantidad', carrito.subtotal() === 35 + 45 * 2);
+carrito.vaciar();
+
 comprobar('Cedula valida de 10 digitos', REGEX.cedula.test('1712345678'));
 comprobar('Cedula invalida', !REGEX.cedula.test('17123456'));
 comprobar('Celular 09 de 10 digitos', REGEX.telefono.test('0991234567'));

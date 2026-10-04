@@ -1,0 +1,117 @@
+name: Verificación y publicación
+
+# El sitio se valida en cada cambio y solo se publica si todo pasa.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  verificar:
+    name: Comprobaciones de calidad
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Copiar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # Playwright se instala solo en el servidor de CI: el proyecto no declara
+      # dependencias ni añade archivos de paquete al repositorio.
+      - name: Instalar Playwright para las pruebas de navegador
+        run: |
+          npm install --no-save --no-package-lock playwright@1.63.0
+          npx playwright install --with-deps chromium
+
+      - name: Sintaxis de JavaScript
+        run: |
+          fallos=0
+          for archivo in $(git ls-files '*.js' '*.mjs'); do
+            node --check "$archivo" || fallos=1
+          done
+          if [ "$fallos" -ne 0 ]; then exit 1; fi
+          echo "Sintaxis correcta en $(git ls-files '*.js' '*.mjs' | wc -l) archivos"
+
+      - name: HTML5 y semántica
+        run: node pruebas/prueba-html.mjs
+
+      - name: Accesibilidad WCAG y ARIA
+        run: node pruebas/prueba-accesibilidad.mjs
+
+      - name: Enlaces externos y rutas
+        run: node pruebas/prueba-enlaces.mjs
+
+      - name: Lógica del carrito y planes
+        run: node pruebas/prueba-logica.mjs
+
+      - name: Integridad de los datos
+        run: node pruebas/prueba-repo.mjs
+
+      - name: Selectores del DOM
+        run: node pruebas/prueba-selectores.mjs
+
+      - name: Recorrido completo en navegador
+        run: node pruebas/prueba-navegador.mjs
+
+      - name: Diseño responsive y accesibilidad medida
+        run: node pruebas/prueba-responsive.mjs
+
+  desplegar:
+    name: Publicar en GitHub Pages
+    needs: verificar
+    # La publicación solo ocurre con un push a la rama principal, nunca desde una
+    # pull request ni desde una ejecución manual incompleta.
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publicar.outputs.page_url }}
+    steps:
+      # Falla aquí si Pages no está habilitado en el repositorio, de modo que no
+      # se publica nada sin la configuración correcta.
+      - name: Verificar la configuración de Pages
+        id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Copiar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar el sitio
+        run: |
+          mkdir -p _sitio
+          cp index.html _sitio/
+          for carpeta in admin assets cliente data js; do
+            cp -r "$carpeta" _sitio/
+          done
+          echo "Archivos preparados: $(find _sitio -type f | wc -l)"
+
+      # Última revisión antes de publicar: comprueba sobre la copia final que no
+      # hay rutas rotas ni destinos inseguros.
+      - name: Validar el sitio preparado
+        run: node pruebas/prueba-enlaces.mjs _sitio
+
+      - name: Subir el artefacto
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _sitio
+
+      - name: Publicar
+        id: publicar
+        uses: actions/deploy-pages@v4

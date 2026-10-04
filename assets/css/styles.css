@@ -206,13 +206,17 @@
   display: none;
 }
 
-@media (min-width: 360px) {
+/* El rótulo de cada botón aparece solo cuando la barra del encabezado sigue
+   cabiendo en una sola fila. Medido en pantalla: con los dos rótulos visibles
+   la fila necesita 450 px, y el rótulo del menú por sí solo necesita 375 px.
+   Mostrarlos antes desbordaba el borde derecho a 360 px y 420 px. */
+@media (min-width: 375px) {
   .pf-menu-boton-texto {
     display: inline;
   }
 }
 
-@media (min-width: 420px) {
+@media (min-width: 450px) {
   .pf-carrito-texto {
     display: inline;
   }
@@ -227,6 +231,14 @@
   .pf-menu-boton {
     padding-left: 0.7rem;
     padding-right: 0.7rem;
+  }
+}
+
+/* A 320 px la palabra más larga del titular ("EVOLUCIONA.") medía 319 px y se
+   quedaba recortada contra el borde derecho. Se reduce solo por debajo de 375 px. */
+@media (max-width: 374px) {
+  #titulo-hero {
+    font-size: 2.5rem;
   }
 }
 
@@ -363,11 +375,20 @@ html {
   scroll-behavior: smooth;
   /* `clip` evita el desplazamiento horizontal sin romper `position: sticky`. */
   overflow-x: clip;
-  background-color: var(--pf-negro);
 }
 
 body {
   overflow-x: clip;
+}
+
+/* El tema oscuro (negro + texto blanco) es el del área cliente, la que usa
+   Tailwind. El panel de administración usa Bootstrap sobre fondo claro y tiene
+   su propio bloque de color al final de esta hoja (`.pf-admin`). */
+html:has(body:not(.pf-admin)) {
+  background-color: var(--pf-negro);
+}
+
+body:not(.pf-admin) {
   background-color: var(--pf-negro);
   color: var(--pf-blanco);
 }
@@ -720,7 +741,10 @@ select option {
 
 .pf-mensaje[data-tipo="exito"] {
   border-left-color: var(--pf-amarillo);
-  background-color: rgba(255, 208, 0, 0.14);
+  /* Superficie opaca: el aviso de confirmación flota sobre cualquier sección
+     (incluida una fotografía del hero), así que no puede depender de un fondo
+     semitransparente para que su texto se lea. */
+  background-color: var(--pf-carbon);
   color: var(--pf-amarillo);
 }
 
@@ -1047,11 +1071,31 @@ select option {
 
 /* ---------- Avisos flotantes ---------- */
 
+/* Entrada de los mensajes. Solo se anima la opacidad: muchos mensajes viven en
+   el flujo normal de la página (formularios, catálogo, panel del carrito) y un
+   `transform` los desplazaría de su sitio y, al terminar la animación, los
+   dejaría fuera de lugar. */
 .pf-aparece {
   animation: pf-aparece 260ms ease both;
 }
 
 @keyframes pf-aparece {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* El aviso flotante sí está centrado con `left: 50%` + `translateX(-50%)`, así
+   que su entrada necesita además el pequeño desplazamiento vertical. Por eso
+   tiene su propia animación en lugar de compartir la de arriba. */
+.pf-aviso.pf-aparece {
+  animation: pf-aparece-aviso 260ms ease both;
+}
+
+@keyframes pf-aparece-aviso {
   from {
     opacity: 0;
     transform: translate(-50%, 10px);
@@ -1095,6 +1139,40 @@ select option {
 
 .pf-aviso[hidden] {
   display: none;
+}
+
+/* =========================================================
+   Área administrativa (Bootstrap): fondo claro, texto oscuro
+   ========================================================= */
+
+/* Las páginas del panel llevan la clase `pf-admin` en <body>. Bootstrap se
+   carga antes que esta hoja, de modo que el color de texto de la sección
+   "Base" (blanco, pensado para el área cliente) ganaba por orden de cascada
+   y dejaba los títulos blancos sobre el fondo claro de Bootstrap. Aquí se
+   restituye un color de texto legible y se mantiene la marca: negro en los
+   títulos, grafito en el texto, amarillo y rojo solo como acentos. */
+.pf-admin {
+  color: var(--pf-carbon);
+}
+
+.pf-admin h1,
+.pf-admin h2,
+.pf-admin h3 {
+  color: var(--pf-negro);
+}
+
+/* Los mensajes del panel se leen sobre fondo claro, así que aquí el amarillo
+   y el rojo pasan a ser el borde de acento y el texto va en tonos oscuros. */
+.pf-admin .pf-mensaje {
+  background-color: #fff8dc;
+  color: #4a3b00;
+  border-left-color: var(--pf-amarillo);
+}
+
+.pf-admin .pf-mensaje[data-tipo="error"] {
+  background-color: #fde8e9;
+  color: #8a1119;
+  border-left-color: var(--pf-rojo);
 }
 
 /* ---------- Respeta a quien prefiere reducir el movimiento ---------- */

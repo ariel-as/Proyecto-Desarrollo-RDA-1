@@ -99,6 +99,33 @@
     <!-- Región de mensajes dinámicos: los anuncios llegan por aria-live -->
     <p id="mensaje-dinamico" class="mx-auto mt-6 max-w-6xl px-4 text-sm font-semibold text-neutral-200" role="status" aria-live="polite"></p>
 
+    <!--
+      Mejora progresiva: el catálogo, los planes y las clases se dibujan con
+      JavaScript a partir de los archivos JSON. Sin JavaScript esa información
+      no aparece, así que se ofrece una vía alternativa equivalente.
+    -->
+    <noscript>
+      <div class="mx-auto mt-6 max-w-6xl px-4">
+        <div class="pf-tarjeta p-6" role="alert">
+          <p class="font-bold text-pf-amarillo">Aviso: parte del contenido necesita JavaScript</p>
+          <p class="mt-2 text-neutral-300">
+            El catálogo de productos, los horarios de clases y las rutinas se cargan de forma automática.
+            Si tu navegador tiene JavaScript desactivado, puedes contratar directamente en recepción o
+            escribirnos a
+            <a class="underline decoration-pf-amarillo" href="mailto:planetafitness@gmail.com">planetafitness@gmail.com</a>.
+          </p>
+          <ul class="mt-4 list-inside list-disc text-neutral-300">
+            <li>Plan individual: <strong class="text-white">$35</strong> al mes.</li>
+            <li>Plan para 2 personas: <strong class="text-white">$60</strong> al mes.</li>
+            <li>Plan para 3 personas: <strong class="text-white">$85</strong> al mes.</li>
+          </ul>
+          <p class="mt-4 text-sm text-neutral-400">
+            Horarios de atención: lunes a viernes de 06:00 a 21:00, sábado de 09:00 a 12:00, domingo cerrado.
+          </p>
+        </div>
+      </div>
+    </noscript>
+
     <!-- ================= Planes ================= -->
     <section id="planes" class="mx-auto max-w-6xl scroll-mt-24 px-4 py-16" aria-labelledby="titulo-planes">
       <h2 id="titulo-planes" class="text-3xl font-extrabold uppercase text-white">Planes</h2>
@@ -268,7 +295,7 @@
               <label class="block font-semibold text-white" for="telefono">Teléfono *</label>
               <input
                 class="mt-1 w-full rounded-lg border border-pf-linea p-2"
-                type="tel" id="telefono" name="telefono" required inputmode="numeric"
+                type="tel" id="telefono" name="telefono" required inputmode="numeric" autocomplete="tel"
                 pattern="^09\d{8}$"
                 data-mensaje-patron="El teléfono debe tener 10 dígitos y empezar por 09."
                 aria-describedby="ayuda-telefono">

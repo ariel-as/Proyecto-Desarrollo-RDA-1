@@ -13,7 +13,7 @@
  * tal cual en localStorage mientras la persona inicia sesión.
  */
 
-import { carrito, formatearPrecio, CANTIDAD_MAXIMA } from './cart.js';
+import { carrito, formatearPrecio, esPlan, CANTIDAD_MAXIMA } from './cart.js';
 import { iniciarSesion, haySesion } from './auth.js';
 import { construirValidador } from './validation.js';
 import { escapar, rutaArchivo, mostrarAviso, actualizarContadorCarrito } from './view.js';
@@ -166,7 +166,33 @@ function inyectarEstructura() {
 
 /** Describe el tipo de la línea para que productos y planes no se confundan. */
 function etiquetaTipo(item) {
-  return item.tipo === 'plan' ? 'Plan mensual' : 'Producto';
+  return esPlan(item) ? 'Plan mensual' : 'Producto';
+}
+
+/**
+ * Botones de cantidad de una línea. Un plan es una suscripción mensual y no
+ * admite más de una unidad, así que en ese caso solo se muestra el valor.
+ */
+function controlCantidad(item) {
+  const nombre = escapar(item.nombre);
+
+  if (esPlan(item)) {
+    return `
+            <span class="pf-cantidad">
+              <output aria-label="Cantidad de ${nombre}">${escapar(item.cantidad)}</output>
+            </span>`;
+  }
+
+  return `
+            <span class="pf-cantidad">
+              <button type="button" data-restar="${escapar(item.id)}" aria-label="Disminuir la cantidad de ${nombre}">
+                <span aria-hidden="true">&minus;</span>
+              </button>
+              <output aria-label="Cantidad de ${nombre}">${escapar(item.cantidad)}</output>
+              <button type="button" data-sumar="${escapar(item.id)}" aria-label="Aumentar la cantidad de ${nombre}">
+                <span aria-hidden="true">+</span>
+              </button>
+            </span>`;
 }
 
 /** Dibuja las líneas del carrito, el subtotal y el total dentro del panel. */
@@ -196,16 +222,7 @@ function pintarPanel() {
           <p class="m-0 text-sm text-neutral-400">${escapar(etiquetaTipo(item))} ${formatearPrecio(
         item.precio
       )} c/u</p>
-          <div class="pf-linea-precios">
-            <span class="pf-cantidad">
-              <button type="button" data-restar="${escapar(item.id)}" aria-label="Disminuir la cantidad de ${escapar(item.nombre)}">
-                <span aria-hidden="true">&minus;</span>
-              </button>
-              <output aria-label="Cantidad de ${escapar(item.nombre)}">${escapar(item.cantidad)}</output>
-              <button type="button" data-sumar="${escapar(item.id)}" aria-label="Aumentar la cantidad de ${escapar(item.nombre)}">
-                <span aria-hidden="true">+</span>
-              </button>
-            </span>
+          <div class="pf-linea-precios">${controlCantidad(item)}
             <span class="pf-precio">${formatearPrecio(item.precio * item.cantidad)}</span>
           </div>
           <button type="button" class="pf-quitar" data-quitar="${escapar(item.id)}">

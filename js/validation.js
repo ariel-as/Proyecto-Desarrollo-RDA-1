@@ -43,6 +43,25 @@ function elementoError(campo) {
   return elemento;
 }
 
+/** Añade el mensaje de error a `aria-describedby` sin perder los ayuda-ficheros
+ *  que el campo ya tenía (WCAG 2.2, 1.3.1 y 3.3.1). */
+function describirConError(campo, idError) {
+  const descritos = (campo.getAttribute('aria-describedby') || '').split(/\s+/).filter(Boolean);
+
+  if (!descritos.includes(idError)) descritos.push(idError);
+  campo.setAttribute('aria-describedby', descritos.join(' '));
+}
+
+/** Quita el mensaje de error de `aria-describedby`, pero conserva el resto. */
+function describirSinError(campo, idError) {
+  const descritos = (campo.getAttribute('aria-describedby') || '')
+    .split(/\s+/)
+    .filter((id) => id && id !== idError);
+
+  if (descritos.length > 0) campo.setAttribute('aria-describedby', descritos.join(' '));
+  else campo.removeAttribute('aria-describedby');
+}
+
 /** Marca el campo como inválido y muestra un mensaje explicativo. */
 export function mostrarError(campo, mensaje) {
   const error = elementoError(campo);
@@ -50,6 +69,7 @@ export function mostrarError(campo, mensaje) {
   error.hidden = false;
   campo.setAttribute('aria-invalid', 'true');
   campo.setCustomValidity(mensaje);
+  describirConError(campo, error.id);
 }
 
 /** Limpia el estado de error del campo. */
@@ -59,6 +79,7 @@ export function limpiarError(campo) {
   if (error) {
     error.textContent = '';
     error.hidden = true;
+    describirSinError(campo, error.id);
   }
 
   campo.removeAttribute('aria-invalid');

@@ -489,6 +489,17 @@ async function pintarClasesAdmin() {
         horaFin: formulario.querySelector(`[name="horaFin-${indice}"]`)?.value || null
       }));
 
+      // Una clase no puede terminar antes de empezar (p. ej. 19:00 → 08:00).
+      const invertido = horarios.find((horario) => horario.horaFin && horario.horaFin <= horario.horaInicio);
+      if (invertido) {
+        mostrarMensaje(
+          region,
+          'La hora de fin debe ser posterior a la hora de inicio en todos los horarios.',
+          'error'
+        );
+        return;
+      }
+
       const entrenadorId = Number(formulario.querySelector('[name="entrenadorId"]').value);
       await actualizarClase(id, { horarios, entrenadorId });
 
