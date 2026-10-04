@@ -1,0 +1,27 @@
+[
+  {
+    "id": 1,
+    "nombre": "Boxeo",
+    "descripcion": "Clase de boxeo dirigida por un entrenador en la parte superior del gimnasio.",
+    "lugar": "Segundo piso / parte superior del gimnasio",
+    "imagen": "assets/img/clases/boxeo.jpg",
+    "entrenadorId": 1,
+    "horarios": [
+      { "id": 1, "dia": "Lunes", "horaInicio": "07:00", "horaFin": "09:00" },
+      { "id": 2, "dia": "Jueves", "horaInicio": "07:00", "horaFin": "09:00" },
+      { "id": 3, "dia": "Viernes", "horaInicio": "07:00", "horaFin": "09:00" }
+    ]
+  },
+  {
+    "id": 2,
+    "nombre": "Bailoterapia",
+    "descripcion": "Clase de bailoterapia dirigida por un entrenador del gimnasio.",
+    "lugar": "Gimnasio",
+    "imagen": "assets/img/clases/bailoterapia.jpg",
+    "entrenadorId": 2,
+    "horarios": [
+      { "id": 4, "dia": "Martes", "horaInicio": "18:30", "horaFin": "20:30" },
+      { "id": 5, "dia": "Jueves", "horaInicio": "18:30", "horaFin": "20:30" }
+    ]
+  }
+]

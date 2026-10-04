@@ -1,0 +1,50 @@
+[
+  {
+    "id": 1,
+    "nombre": "Plan individual",
+    "precio": 35.0,
+    "personas": 1,
+    "descripcion": "Acceso mensual para una persona a los 2 pisos del gimnasio.",
+    "beneficios": [
+      "Acceso a los 2 pisos",
+      "Pesas",
+      "Cardio",
+      "Boxeo",
+      "Bailoterapia",
+      "Rutina según nivel"
+    ],
+    "imagen": "assets/img/gimnasio/pesas.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Plan para 2 personas",
+    "precio": 60.0,
+    "personas": 2,
+    "descripcion": "Acceso mensual para dos personas a los 2 pisos del gimnasio.",
+    "beneficios": [
+      "Acceso a los 2 pisos",
+      "Pesas",
+      "Cardio",
+      "Boxeo",
+      "Bailoterapia",
+      "Rutina según nivel"
+    ],
+    "imagen": "assets/img/gimnasio/cardio.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Plan para 3 personas",
+    "precio": 85.0,
+    "personas": 3,
+    "descripcion": "Acceso mensual para tres personas a los 2 pisos del gimnasio.",
+    "beneficios": [
+      "Acceso a los 2 pisos",
+      "Pesas",
+      "Cardio",
+      "Boxeo",
+      "Bailoterapia",
+      "Rutina según nivel"
+    ],
+    "imagen": "assets/img/gimnasio/hero-gimnasio.jpg"
+  }
+]

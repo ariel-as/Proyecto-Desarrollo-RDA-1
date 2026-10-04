@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" role="img" aria-label="Ilustración genérica de producto">
+  <title>Producto del catálogo</title>
+  <rect width="600" height="600" fill="#1F1F1F"/>
+  <rect x="150" y="200" width="300" height="240" rx="36" fill="#ffffff" stroke="#E21B23" stroke-width="10"/>
+  <path d="M230 200v-40a36 36 0 0 1 36-36h68a36 36 0 0 1 36 36v40" fill="none" stroke="#E21B23" stroke-width="10" stroke-linecap="round"/>
+  <g fill="none" stroke="#FFD000" stroke-width="14" stroke-linecap="round">
+    <line x1="215" y1="290" x2="385" y2="290"/>
+    <line x1="215" y1="350" x2="340" y2="350"/>
+  </g>
+  <text x="300" y="480" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="34" font-weight="bold" fill="#E21B23">PLANETA FITNESS</text>
+</svg>

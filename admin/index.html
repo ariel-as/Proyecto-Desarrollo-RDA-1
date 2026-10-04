@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Administración Planeta Fitness</title>
+  <meta name="description" content="Panel administrativo del sitio de Planeta Fitness: productos, planes, clases, entrenadores y citas.">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="bg-light" data-pagina="index">
+  <a class="pf-saltar" href="#contenido">Ir al contenido principal</a>
+
+  <header class="bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Navegación del dashboard">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="../assets/img/logo/logo-blanco.svg" alt="" width="150" height="42" class="h-8">
+          <span>Planeta Fitness · Admin</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-admin"
+          aria-controls="menu-admin" aria-expanded="false" aria-label="Mostrar el menú de administración">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu-admin">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link active" href="index.html" aria-current="page">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
+            <li class="nav-item"><a class="nav-link" href="planes.html">Planes</a></li>
+            <li class="nav-item"><a class="nav-link" href="clases.html">Clases</a></li>
+            <li class="nav-item"><a class="nav-link" href="entrenadores.html">Entrenadores</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-3">
+            <span class="text-light small">Sesión de <strong data-admin-nombre></strong></span>
+            <a href="../index.html" class="btn btn-outline-light btn-sm">Ver sitio</a>
+            <button type="button" class="btn btn-outline-warning btn-sm" data-cerrar-sesion>Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido" class="container py-4">
+    <h1 class="h3 mb-1">Dashboard</h1>
+    <p class="text-body-secondary">
+      Gestión de la información que usa el sitio de Planeta Fitness.
+      <span class="d-block small" data-ultima-actualizacion></span>
+    </p>
+
+    <!-- Indicadores -->
+    <section class="row g-3 my-1" aria-labelledby="titulo-indicadores">
+      <h2 id="titulo-indicadores" class="visually-hidden">Indicadores del catálogo</h2>
+      <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <p class="card-text text-body-secondary small">Productos</p>
+            <p class="display-6 fw-bold mb-0" data-total-productos>0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <p class="card-text text-body-secondary small">Planes</p>
+            <p class="display-6 fw-bold mb-0" data-total-planes>0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <p class="card-text text-body-secondary small">Clases</p>
+            <p class="display-6 fw-bold mb-0" data-total-clases>0</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <p class="card-text text-body-secondary small">Citas de nutrición</p>
+            <p class="display-6 fw-bold mb-0" data-total-citas>0</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="row g-4 mt-1">
+      <!-- Accesos rápidos -->
+      <section class="col-12 col-lg-5" aria-labelledby="titulo-accesos">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h2 id="titulo-accesos" class="h5">Accesos rápidos</h2>
+            <ul class="list-unstyled mb-0">
+              <li class="mb-2"><a class="btn btn-primary w-100" href="productos.html">Gestionar productos</a></li>
+              <li class="mb-2"><a class="btn btn-outline-primary w-100" href="planes.html">Editar información de los planes</a></li>
+              <li class="mb-2"><a class="btn btn-outline-primary w-100" href="clases.html">Gestionar horarios de clases</a></li>
+              <li><a class="btn btn-outline-primary w-100" href="entrenadores.html">Gestionar entrenadores</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Citas de nutrición -->
+      <section class="col-12 col-lg-7" aria-labelledby="titulo-citas">
+        <div class="card h-100 shadow-sm">
+          <div class="card-body">
+            <h2 id="titulo-citas" class="h5">Solicitudes de cita de nutrición</h2>
+            <p class="text-body-secondary small">
+              Se guardan localmente en el navegador. El precio de la asesoría nutricional se consulta en el gimnasio.
+            </p>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle" data-tabla-citas>
+                <caption class="visually-hidden">Citas de nutrición registradas en este navegador</caption>
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Persona</th>
+                    <th scope="col">Correo</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Cita</th>
+                    <th scope="col">Estado</th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Entrenadores registrados -->
+    <section class="mt-4" aria-labelledby="titulo-entrenadores-resumen">
+      <h2 id="titulo-entrenadores-resumen" class="h5">Entrenadores registrados</h2>
+      <p class="text-body-secondary small">El gimnasio cuenta con 3 entrenadores.</p>
+      <p class="fw-semibold" data-total-entrenadores>0</p>
+    </section>
+  </main>
+
+  <footer class="border-top py-4 mt-5">
+    <p class="container text-center text-body-secondary mb-0">
+      © <span data-anio>2026</span> Planeta Fitness · Proyecto académico
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutrición | Planeta Fitness</title>
+  <meta name="description" content="Evaluación, análisis personalizado y asesoría nutricional con cita en Planeta Fitness.">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../assets/js/identidad.js"></script>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="bg-pf-negro text-neutral-200" data-pagina="nutricion">
+  <a class="pf-saltar" href="#contenido">Ir al contenido principal</a>
+
+  <header class="pf-encabezado border-b border-pf-linea bg-pf-negro">
+    <nav class="pf-nav mx-auto max-w-6xl px-4" aria-label="Navegación principal">
+      <a href="../index.html" class="pf-logo" aria-label="Planeta Fitness, ir al inicio">
+        <img src="../assets/img/logo/logo.svg" alt="Planeta Fitness" width="180" height="50">
+      </a>
+
+      <div id="menu-principal" data-menu class="pf-menu">
+        <ul class="pf-menu-lista">
+          <li><a href="../index.html#inicio" class="pf-enlace">Inicio</a></li>
+          <li><a href="../index.html#planes" class="pf-enlace">Planes</a></li>
+          <li><a href="../index.html#tienda" class="pf-enlace">Tienda</a></li>
+          <li><a href="../index.html#clases" class="pf-enlace">Clases</a></li>
+          <li><a href="../index.html#rutinas" class="pf-enlace">Rutinas</a></li>
+          <li><a href="nutricion.html" class="pf-enlace pf-enlace-activo" aria-current="location">Nutrición</a></li>
+          <li><a href="../index.html#contacto" class="pf-enlace">Contacto</a></li>
+        </ul>
+
+        <div class="pf-menu-acciones">
+          <div data-sesion="inactiva" class="contents">
+            <a href="login.html" class="pf-boton pf-boton-secundario">Inscríbete</a>
+          </div>
+          <div data-sesion="activa" class="contents" hidden>
+            <span class="pf-usuario">
+              <span class="pf-usuario-saludo">Hola,</span>
+              <span class="pf-usuario-nombre" data-nombre-sesion></span>
+            </span>
+            <button type="button" class="pf-boton pf-boton-secundario" data-cerrar-sesion>Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="pf-boton pf-boton-primario pf-carrito"
+        data-abrir-carrito
+        aria-expanded="false"
+        aria-controls="panel-carrito">
+        <span aria-hidden="true">&#128722;</span>
+        <span class="pf-carrito-texto">Carrito</span>
+        <span class="pf-carrito-contador" data-contador-carrito>0</span>
+      </button>
+
+      <button
+        type="button"
+        class="pf-boton pf-boton-secundario pf-menu-boton"
+        data-menu-boton
+        aria-expanded="false"
+        aria-controls="menu-principal">
+        <span aria-hidden="true">&#9776;</span> <span class="pf-menu-boton-texto">Menú</span>
+      </button>
+    </nav>
+  </header>
+
+  <main id="contenido" class="mx-auto max-w-6xl px-4 py-10">
+    <nav aria-label="Ruta de navegación" class="mb-4 text-sm text-neutral-400">
+      <ol class="flex flex-wrap items-center gap-2">
+        <li><a href="../index.html" class="underline">Inicio</a></li>
+        <li aria-hidden="true">/</li>
+        <li aria-current="page" class="font-semibold text-pf-amarillo">Nutrición</li>
+      </ol>
+    </nav>
+    <h1 class="text-3xl font-extrabold uppercase text-white sm:text-4xl">Sección de nutrición</h1>
+
+    <div class="mt-6 grid gap-10 lg:grid-cols-2">
+      <section aria-labelledby="titulo-servicio-nutricion">
+        <h2 id="titulo-servicio-nutricion" class="text-2xl font-bold uppercase text-white">Servicios que realiza la nutricionista</h2>
+        <ul class="mt-4 space-y-3">
+          <li class="pf-tarjeta p-4">
+            <h3 class="font-bold text-pf-amarillo">Evaluación</h3>
+            <p class="mt-1 text-sm text-neutral-300">Revisión de tus hábitos de alimentación y actividad física.</p>
+          </li>
+          <li class="pf-tarjeta p-4">
+            <h3 class="font-bold text-pf-amarillo">Análisis personalizado</h3>
+            <p class="mt-1 text-sm text-neutral-300">Indicaciones según tu objetivo dentro del gimnasio.</p>
+          </li>
+          <li class="pf-tarjeta p-4">
+            <h3 class="font-bold text-pf-amarillo">Asesoría nutricional</h3>
+            <p class="mt-1 text-sm text-neutral-300">Tiene un precio diferente y se obtiene mediante cita.</p>
+          </li>
+        </ul>
+
+        <p class="pf-mensaje mt-6">
+          <strong>Precio:</strong> la asesoría nutricional no tiene precio publicado en el sitio.
+          Se consulta en el gimnasio al agendar la cita.
+        </p>
+
+        <figure class="mt-6">
+          <img
+            src="../assets/img/gimnasio/nutricion.jpg"
+            alt="Consulta de evaluación nutricional en Planeta Fitness"
+            class="rounded-xl border border-pf-linea"
+            width="800" height="600" loading="lazy">
+          <figcaption class="mt-2 text-sm text-neutral-400">Las citas se agendan dentro del horario de atención del gimnasio.</figcaption>
+        </figure>
+      </section>
+
+      <section aria-labelledby="titulo-formulario-nutricion">
+        <h2 id="titulo-formulario-nutricion" class="text-2xl font-bold uppercase text-white">Solicitar cita</h2>
+        <p class="mt-2 text-sm text-neutral-300">Los campos marcados con * son obligatorios.</p>
+
+        <form id="formulario-nutricion" class="mt-4 space-y-4" novalidate>
+          <fieldset class="rounded-xl border border-pf-linea p-4">
+            <legend class="px-2 font-bold text-white">Tus datos</legend>
+
+            <div class="mt-2">
+              <label class="block font-semibold text-white" for="nombre">Nombre completo *</label>
+              <input
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                type="text" id="nombre" name="nombre" required minlength="2" maxlength="60" autocomplete="name"
+                aria-describedby="ayuda-nombre">
+              <p id="ayuda-nombre" class="text-sm text-neutral-400">Entre 2 y 60 letras.</p>
+            </div>
+
+            <div class="mt-4">
+              <label class="block font-semibold text-white" for="cedula">Cédula *</label>
+              <input
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                type="text" id="cedula" name="cedula" required pattern="^\d{10}$" inputmode="numeric"
+                data-mensaje-patron="La cédula debe tener 10 dígitos."
+                aria-describedby="ayuda-cedula">
+              <p id="ayuda-cedula" class="text-sm text-neutral-400">10 dígitos, sin letras ni guiones.</p>
+            </div>
+
+            <div class="mt-4">
+              <label class="block font-semibold text-white" for="telefono">Teléfono *</label>
+              <input
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                type="tel" id="telefono" name="telefono" required pattern="^09\d{8}$" inputmode="numeric"
+                data-mensaje-patron="El teléfono debe tener 10 dígitos y empezar por 09."
+                aria-describedby="ayuda-telefono">
+              <p id="ayuda-telefono" class="text-sm text-neutral-400">Ejemplo: 0991234567</p>
+            </div>
+
+            <div class="mt-4">
+              <label class="block font-semibold text-white" for="correo">Correo electrónico *</label>
+              <input
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                type="email" id="correo" name="correo" required autocomplete="email"
+                aria-describedby="ayuda-correo-nutricion">
+              <p id="ayuda-correo-nutricion" class="text-sm text-neutral-400">Ejemplo: nombre@correo.com</p>
+            </div>
+          </fieldset>
+
+          <fieldset class="rounded-xl border border-pf-linea p-4">
+            <legend class="px-2 font-bold text-white">Datos de la cita</legend>
+
+            <div class="mt-2">
+              <label class="block font-semibold text-white" for="fecha">Fecha deseada *</label>
+              <input
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                type="date" id="fecha" name="fecha" required
+                aria-describedby="ayuda-fecha">
+              <p id="ayuda-fecha" class="text-sm text-neutral-400">Solo se aceptan fechas de hoy en adelante.</p>
+            </div>
+
+            <div class="mt-4">
+              <label class="block font-semibold text-white" for="hora">Hora preferida *</label>
+              <input
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                type="time" id="hora" name="hora" required
+                min="06:00" max="21:00" step="1800"
+                aria-describedby="ayuda-hora">
+              <p id="ayuda-hora" class="text-sm text-neutral-400">Horario del gimnasio: 06:00 a 21:00 (sábado hasta las 12:00).</p>
+            </div>
+
+            <div class="mt-4">
+              <label class="block font-semibold text-white" for="motivo">Motivo de la consulta *</label>
+              <select class="mt-1 w-full rounded-lg border border-pf-linea p-2" id="motivo" name="motivo" required>
+                <option value="">Selecciona una opción</option>
+                <option value="Evaluación">Evaluación</option>
+                <option value="Análisis personalizado">Análisis personalizado</option>
+                <option value="Asesoría nutricional">Asesoría nutricional</option>
+              </select>
+            </div>
+
+            <div class="mt-4">
+              <label class="block font-semibold text-white" for="comentarios">Comentarios</label>
+              <textarea
+                class="mt-1 w-full rounded-lg border border-pf-linea p-2"
+                id="comentarios" name="comentarios" rows="3" maxlength="300"
+                aria-describedby="ayuda-comentarios"></textarea>
+              <p id="ayuda-comentarios" class="text-sm text-neutral-400">Opcional, máximo 300 caracteres.</p>
+            </div>
+          </fieldset>
+
+          <button type="submit" class="pf-boton pf-boton-primario">Solicitar cita</button>
+          <p id="mensaje-nutricion" class="pf-mensaje" role="status" aria-live="polite" hidden></p>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <footer class="mt-12 border-t border-pf-linea bg-pf-negro py-10">
+    <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-4">
+      <img src="../assets/img/logo/logo-blanco.svg" alt="Planeta Fitness" width="180" height="50" class="h-10 w-auto">
+      <nav aria-label="Pie de página">
+        <ul class="flex flex-wrap gap-4 text-sm">
+          <li><a href="../index.html" class="underline hover:text-pf-amarillo">Inicio</a></li>
+          <li><a href="../index.html#planes" class="underline hover:text-pf-amarillo">Planes</a></li>
+          <li><a href="../index.html#clases" class="underline hover:text-pf-amarillo">Clases</a></li>
+          <li><a href="../index.html#tienda" class="underline hover:text-pf-amarillo">Tienda</a></li>
+          <li><a href="../admin/login.html" class="underline hover:text-pf-amarillo">Acceso administrativo</a></li>
+        </ul>
+      </nav>
+      <p class="text-sm text-neutral-400">
+        <span data-gimnasio-direccion>Avenida San Rio de Janeiro y Panamá, Quito, Ecuador</span><br>
+        © <span data-anio>2026</span> Planeta Fitness.
+      </p>
+    </div>
+  </footer>
+
+  <aside class="pf-aviso pf-foco-claro border border-pf-linea p-4 text-sm text-white" data-aviso-cookies aria-label="Aviso de cookies">
+    <p>Este sitio utiliza cookies para mejorar tu experiencia.</p>
+    <button type="button" class="pf-boton pf-boton-primario mt-2" data-aceptar-cookies>Entendido</button>
+  </aside>
+
+  <div class="pf-aviso pf-mensaje" data-aviso role="status" aria-live="polite" hidden></div>
+
+  <script type="module" src="../js/app.js"></script>
+</body>
+</html>

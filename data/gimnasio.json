@@ -1,0 +1,92 @@
+{
+  "gimnasio": {
+    "nombre": "Planeta Fitness",
+    "direccion": "Avenida San Rio de Janeiro y Panamá, Quito, Ecuador",
+    "correo": "planetafitness@gmail.com",
+    "horarios": [
+      {
+        "id": 1,
+        "dias": "Lunes a viernes",
+        "horaInicio": "06:00",
+        "horaFin": "21:00"
+      },
+      {
+        "id": 2,
+        "dias": "Sábado",
+        "horaInicio": "09:00",
+        "horaFin": "12:00"
+      },
+      {
+        "id": 3,
+        "dias": "Domingo",
+        "horaInicio": null,
+        "horaFin": null
+      }
+    ]
+  },
+  "servicios": [
+    {
+      "id": 1,
+      "nombre": "Área de pesas",
+      "descripcion": "Zona de pesas con máquinas y área libre de entrenamiento.",
+      "imagen": "assets/img/gimnasio/pesas.jpg"
+    },
+    {
+      "id": 2,
+      "nombre": "Área de cardio",
+      "descripcion": "Máquinas de cardio para trabajar resistencia.",
+      "imagen": "assets/img/gimnasio/cardio.jpg"
+    },
+    {
+      "id": 3,
+      "nombre": "Boxeo",
+      "descripcion": "Clase dirigida en el segundo piso del gimnasio.",
+      "imagen": "assets/img/clases/boxeo.jpg"
+    },
+    {
+      "id": 4,
+      "nombre": "Bailoterapia",
+      "descripcion": "Clase de baile que se realiza con entrenador.",
+      "imagen": "assets/img/clases/bailoterapia.jpg"
+    },
+    {
+      "id": 5,
+      "nombre": "Rutinas personalizadas",
+      "descripcion": "Rutinas indicadas según nivel: principiante, intermedio o avanzado.",
+      "imagen": "assets/img/gimnasio/hero-gimnasio.jpg"
+    },
+    {
+      "id": 6,
+      "nombre": "Nutrición",
+      "descripcion": "Evaluación, análisis personalizado y asesoría nutricional mediante cita.",
+      "imagen": "assets/img/gimnasio/nutricion.jpg"
+    }
+  ],
+  "niveles": [
+    "Principiante",
+    "Intermedio",
+    "Avanzado"
+  ],
+  "usuariosPrueba": [
+    {
+      "id": "cli-001",
+      "nombre": "Cliente Prueba",
+      "correo": "cliente@planetafitness.ec",
+      "telefono": "0991234567",
+      "cedula": "1712345678",
+      "nivel": "Principiante",
+      "contrasena": "cliente123",
+      "rol": "cliente"
+    },
+    {
+      "id": "adm-001",
+      "nombre": "Administrador",
+      "correo": "admin@planetafitness.ec",
+      "telefono": "0997654321",
+      "cedula": "1711111111",
+      "nivel": "Intermedio",
+      "contrasena": "admin123",
+      "rol": "admin"
+    }
+  ]
+}

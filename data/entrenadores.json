@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "nombre": "Entrenador 1",
+    "especialidad": "Boxeo",
+    "descripcion": "Encargado de las clases de boxeo y de la técnica de golpes.",
+    "claseIds": [1],
+    "imagen": "assets/img/entrenadores/entrenador-1.jpg"
+  },
+  {
+    "id": 2,
+    "nombre": "Entrenador 2",
+    "especialidad": "Bailoterapia",
+    "descripcion": "Encargado de las clases de bailoterapia del gimnasio.",
+    "claseIds": [2],
+    "imagen": "assets/img/entrenadores/entrenador-2.jpg"
+  },
+  {
+    "id": 3,
+    "nombre": "Entrenador 3",
+    "especialidad": "Rutinas personalizadas",
+    "descripcion": "Elabora rutinas según el nivel del usuario: principiante, intermedio o avanzado.",
+    "claseIds": [],
+    "imagen": "assets/img/entrenadores/entrenador-3.jpg"
+  }
+]

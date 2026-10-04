@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planes | Administración Planeta Fitness</title>
+  <meta name="description" content="Edición de la información de los planes de Planeta Fitness.">
+  <link rel="icon" href="../assets/icons/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../assets/css/styles.css">
+</head>
+<body class="bg-light" data-pagina="planes">
+  <a class="pf-saltar" href="#contenido">Ir al contenido principal</a>
+
+  <header class="bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Navegación del dashboard">
+      <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="index.html">
+          <img src="../assets/img/logo/logo-blanco.svg" alt="" width="150" height="42" class="h-8">
+          <span>Planeta Fitness · Admin</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu-admin"
+          aria-controls="menu-admin" aria-expanded="false" aria-label="Mostrar el menú de administración">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu-admin">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="productos.html">Productos</a></li>
+            <li class="nav-item"><a class="nav-link active" href="planes.html" aria-current="page">Planes</a></li>
+            <li class="nav-item"><a class="nav-link" href="clases.html">Clases</a></li>
+            <li class="nav-item"><a class="nav-link" href="entrenadores.html">Entrenadores</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-3">
+            <span class="text-light small">Sesión de <strong data-admin-nombre></strong></span>
+            <a href="../index.html" class="btn btn-outline-light btn-sm">Ver sitio</a>
+            <button type="button" class="btn btn-outline-warning btn-sm" data-cerrar-sesion>Cerrar sesión</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main id="contenido" class="container py-4">
+    <nav aria-label="Ruta de navegación" class="mb-3 small">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Planes</li>
+      </ol>
+    </nav>
+
+    <h1 class="h3">Planes del gimnasio</h1>
+    <p class="text-body-secondary">
+      El proyecto mantiene tres planes: individual ($35), para 2 personas ($60) y para 3 personas ($85).
+      No se pueden agregar otros planes.
+    </p>
+
+    <p id="mensaje-planes" class="pf-mensaje" role="status" aria-live="polite" hidden></p>
+
+    <div class="row g-4">
+      <section class="col-12 col-lg-7" aria-labelledby="titulo-tabla-planes">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h2 id="titulo-tabla-planes" class="h5">Planes publicados</h2>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle">
+                <caption class="visually-hidden">Planes publicados en el sitio</caption>
+                <thead class="table-light">
+                  <tr>
+                    <th scope="col">Plan</th>
+                    <th scope="col">Personas</th>
+                    <th scope="col">Precio</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Acción</th>
+                  </tr>
+                </thead>
+                <tbody data-tabla-planes></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="col-12 col-lg-5" aria-labelledby="titulo-editar-plan">
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <h2 id="titulo-editar-plan" class="h5">Editar plan</h2>
+            <p class="text-body-secondary small">Pulsa «Editar» en la tabla para cargar el plan aquí.</p>
+
+            <form id="formulario-plan" novalidate>
+              <input type="hidden" id="id-plan" name="id">
+
+              <div class="mb-3">
+                <label class="form-label" for="nombre-plan">Nombre del plan *</label>
+                <input class="form-control" type="text" id="nombre-plan" name="nombre" required minlength="2" maxlength="60">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="precio-plan">Precio mensual (USD) *</label>
+                <input class="form-control" type="number" id="precio-plan" name="precio" required
+                  min="1" max="200" step="0.01" inputmode="decimal">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="descripcion-plan">Descripción *</label>
+                <textarea class="form-control" id="descripcion-plan" name="descripcion" rows="3" required minlength="10"
+                  maxlength="200"></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100">Guardar cambios del plan</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="border-top py-4 mt-5">
+    <p class="container text-center text-body-secondary mb-0">
+      © <span data-anio>2026</span> Planeta Fitness · Proyecto académico
+    </p>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="../js/admin.js"></script>
+</body>
+</html>

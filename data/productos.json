@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "nombre": "Proteína",
+    "categoria": "Suplementos",
+    "precio": 45,
+    "descripcion": "Proteína para complementar la alimentación deportiva.",
+    "imagen": "assets/img/productos/proteina.jpg",
+    "destacado": true
+  },
+  {
+    "id": 2,
+    "nombre": "Creatina",
+    "categoria": "Suplementos",
+    "precio": 25,
+    "descripcion": "Creatina para apoyar el desarrollo de fuerza.",
+    "imagen": "assets/img/productos/creatina.jpg",
+    "destacado": true
+  },
+  {
+    "id": 3,
+    "nombre": "Barras energéticas",
+    "categoria": "Suplementos",
+    "precio": 18,
+    "descripcion": "Barras energéticas para consumir antes o después del entrenamiento.",
+    "imagen": "assets/img/productos/barras-energeticas.jpg",
+    "destacado": true
+  },
+  {
+    "id": 4,
+    "nombre": "Camisetas deportivas",
+    "categoria": "Ropa",
+    "precio": 30,
+    "descripcion": "Camisetas deportivas del gimnasio. Tallas S, M, L y XL.",
+    "imagen": "assets/img/productos/camisetas-deportivas.jpg",
+    "destacado": false
+  },
+  {
+    "id": 5,
+    "nombre": "Shorts deportivos",
+    "categoria": "Ropa",
+    "precio": 28,
+    "descripcion": "Shorts deportivos del gimnasio. Tallas S, M, L y XL.",
+    "imagen": "assets/img/productos/shorts-deportivas.jpg",
+    "destacado": false
+  }
+]
