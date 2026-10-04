@@ -34,6 +34,48 @@ function comprobar(descripcion, condicion, extra = '') {
   if (!condicion) fallos += 1;
 }
 
+/* El panel pinta sus datos de forma asíncrona (Fetch de los JSON e IndexedDB).
+   Una espera fija no garantiza que el DOM esté listo: en un runner lento la
+   lectura llegaba antes de tiempo y la comprobación fallaba sin motivo. Estas
+   utilidades esperan al estado esperado y, si no llega, la comprobación que las
+   sigue sigue mostrando el valor real leído para poder diagnosticar. */
+const ESPERA_DOM = 20000;
+
+async function esperarEnElDom(condicion, argumento) {
+  return pagina
+    .waitForFunction(condicion, argumento, { timeout: ESPERA_DOM })
+    .then(() => true)
+    .catch(() => false);
+}
+
+/** Espera a que un elemento muestre exactamente un texto. */
+const esperarTexto = (selector, valor) =>
+  esperarEnElDom(
+    ([sel, esperado]) => document.querySelector(sel)?.textContent.trim() === esperado,
+    [selector, valor]
+  );
+
+/** Espera a que un conjunto de elementos tenga una cantidad concreta de hijos. */
+const esperarCantidad = (selector, cantidad) =>
+  esperarEnElDom(([sel, n]) => document.querySelectorAll(sel).length === n, [selector, cantidad]);
+
+/** Espera a que algún elemento del conjunto contenga un texto. */
+const esperarTextoEn = (selector, texto) =>
+  esperarEnElDom(
+    ([sel, t]) => [...document.querySelectorAll(sel)].some((n) => n.textContent.includes(t)),
+    [selector, texto]
+  );
+
+/** Espera a que un elemento se muestre en pantalla. */
+const esperarVisible = (selector) =>
+  pagina.locator(selector).first().waitFor({ state: 'visible', timeout: ESPERA_DOM }).then(() => true).catch(() => false);
+
+/** Espera a que el contador del encabezado muestre un valor y lo devuelve. */
+async function contadorCarrito(valor) {
+  await esperarTexto('[data-contador-carrito]', valor);
+  return pagina.locator('[data-contador-carrito]').first().innerText();
+}
+
 /* El panel lateral y el modal animan su visibilidad (260 ms). Se espera a que
    termine la transición antes de preguntar por isVisible/isHidden. */
 const TRANSICION = 400;
@@ -117,7 +159,7 @@ comprobar('Los títulos de categoría usan h3', (await pagina.locator('[data-cat
 await pagina.locator('[data-catalogo] article button[data-accion="agregar"]').nth(0).click();
 await pagina.locator('[data-catalogo] article button[data-accion="agregar"]').nth(1).click();
 await pagina.waitForTimeout(200);
-comprobar('El contador del carrito muestra 2', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '2');
+comprobar('El contador del carrito muestra 2', (await contadorCarrito('2')));
 comprobar('Agregar al carrito no exige sesión', pagina.url().includes('index.html'));
 comprobar('El panel lateral está inyectado', (await pagina.locator('[data-panel-carrito]').count()) === 1);
 comprobar('El panel lateral arranca cerrado', await pagina.locator('[data-panel-carrito]').isHidden());
@@ -161,7 +203,7 @@ await pagina.click('[data-panel-vaciar]');
 await pagina.waitForTimeout(200);
 comprobar('Vaciar el panel deja el carrito vacío', (await pagina.locator('[data-panel-lineas] li').count()) === 0);
 comprobar('El panel avisa que el carrito está vacío', await pagina.locator('[data-panel-vacio-state]').isVisible());
-comprobar('El contador del encabezado vuelve a 0', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '0');
+comprobar('El contador del encabezado vuelve a 0', (await contadorCarrito('0')));
 
 await pagina.click('[data-panel-finalizar]');
 await pagina.waitForTimeout(200);
@@ -176,18 +218,18 @@ comprobar('Continuar comprando cierra el panel', await pagina.locator('[data-pan
 await pagina.locator('[data-catalogo] article button[data-accion="agregar"]').nth(0).click();
 await pagina.waitForTimeout(200);
 await pagina.goto(`${BASE}/index.html`, { waitUntil: 'networkidle' });
-comprobar('El carrito sobrevive al cambio de página', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '1');
+comprobar('El carrito sobrevive al cambio de página', (await contadorCarrito('1')));
 await abrirPanel();
 comprobar('El panel se puede abrir desde el inicio', await pagina.locator('[data-panel-carrito]').isVisible());
 await pagina.click('[data-panel-vaciar]');
 await esperar();
-comprobar('El carrito queda limpio para el flujo de planes', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '0');
+comprobar('El carrito queda limpio para el flujo de planes', (await contadorCarrito('0')));
 
 /* ---------- 4. Flujo de plan: al carrito y login al finalizar ---------- */
 // El panel quedó abierto tras vaciar: se cierra antes de operar con los planes.
 await pagina.keyboard.press('Escape');
 await esperar();
-comprobar('El carrito arranca vacío para el flujo de plan', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '0');
+comprobar('El carrito arranca vacío para el flujo de plan', (await contadorCarrito('0')));
 
 await pagina.click('article[data-plan="1"] button[data-accion="elegir-plan"]');
 await esperar();
@@ -204,21 +246,22 @@ comprobar('El plan se conserva mientras se inicia sesión', (await pagina.locato
 await pagina.fill('#acceso-correo', 'cliente@planetafitness.ec');
 await pagina.fill('#acceso-contrasena', 'cliente123');
 await pagina.click('[data-formulario-acceso] button[type="submit"]');
-await pagina.waitForURL(/checkout\.html/, { timeout: 8000 });
+await pagina.waitForURL(/checkout\.html/, { timeout: 20000 });
 comprobar('Tras iniciar sesión el plan llega al checkout', pagina.url().includes('checkout.html'));
+await esperarCantidad('[data-checkout-resumen] li', 1);
 comprobar('El checkout lista 1 línea', (await pagina.locator('[data-checkout-resumen] li').count()) === 1);
 comprobar('El checkout suma $35.00', (await pagina.locator('[data-checkout-total]').innerText()) === '$35.00');
 
 await pagina.fill('#nombre', 'Ana Pérez');
 await pagina.fill('#telefono', '0991234567');
 await pagina.click('#formulario-checkout button[type="submit"]');
-await pagina.waitForTimeout(600);
+await esperarVisible('[data-checkout-confirmacion]');
 comprobar('El plan se confirma', await pagina.locator('[data-checkout-confirmacion]').isVisible());
 comprobar(
   'El plan comprado queda como suscripción del cliente',
   await pagina.evaluate(() => Boolean(localStorage.getItem('suscripcion-cli-001')))
 );
-comprobar('El carrito se vacía tras confirmar el plan', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '0');
+comprobar('El carrito se vacía tras confirmar el plan', (await contadorCarrito('0')));
 
 // El pedido del plan se limpia para no confundir el siguiente flujo de compra.
 await pagina.evaluate(
@@ -325,8 +368,9 @@ comprobar('El modal avisa si la contraseña falla', (await pagina.locator('[data
 
 await pagina.fill('#acceso-contrasena', 'cliente123');
 await pagina.click('[data-formulario-acceso] button[type="submit"]');
-await pagina.waitForURL(/checkout\.html/, { timeout: 8000 });
+await pagina.waitForURL(/checkout\.html/, { timeout: 20000 });
 comprobar('Tras iniciar sesión el flujo llega al checkout', pagina.url().includes('checkout.html'));
+await esperarCantidad('[data-checkout-resumen] li', 2);
 comprobar('El checkout conserva los 2 productos', (await pagina.locator('[data-checkout-resumen] li').count()) === 2);
 comprobar('El checkout muestra el total de $70.00', (await pagina.locator('[data-checkout-total]').innerText()) === '$70.00');
 comprobar('El checkout autocompleta el correo de la sesión', (await pagina.inputValue('#correo')) === 'cliente@planetafitness.ec');
@@ -339,15 +383,16 @@ comprobar('El checkout no confirma con datos incompletos', await pagina.locator(
 await pagina.fill('#nombre', 'Ana Pérez');
 await pagina.fill('#telefono', '0991234567');
 await pagina.click('#formulario-checkout button[type="submit"]');
-await pagina.waitForTimeout(600);
+await esperarVisible('[data-checkout-confirmacion]');
 comprobar('El pedido se confirma', await pagina.locator('[data-checkout-confirmacion]').isVisible());
 comprobar('La confirmación indica el punto de retiro', (await pagina.locator('[data-checkout-confirmacion]').innerText()).includes('Avenida San Rio de Janeiro y Panamá'));
+await esperarCantidad('[data-confirmacion-resumen] li', 4);
 comprobar('La confirmación muestra el código del pedido', (await pagina.locator('[data-confirmacion-resumen] li').count()) === 4);
 comprobar(
   'El pedido quedó guardado en localStorage',
   await pagina.evaluate(() => JSON.parse(localStorage.getItem('pedidos') || '[]').length === 1)
 );
-comprobar('El carrito se vacía tras confirmar', (await pagina.locator('[data-contador-carrito]').first().innerText()) === '0');
+comprobar('El carrito se vacía tras confirmar', (await contadorCarrito('0')));
 comprobar(
   'El pedido también quedó en IndexedDB',
   await pagina.evaluate(
@@ -366,7 +411,7 @@ comprobar(
 );
 
 await pagina.goto(`${BASE}/cliente/checkout.html`, { waitUntil: 'networkidle' });
-await pagina.waitForTimeout(400);
+await esperarVisible('[data-checkout-vacio]');
 comprobar('El checkout con carrito vacío ofrece la tienda', await pagina.locator('[data-checkout-vacio]').isVisible());
 
 // El checkout no debe abrirse sin sesión aunque se escriba la URL.
@@ -416,20 +461,30 @@ comprobar('Una cuenta de cliente no entra al dashboard', pagina.url().includes('
 await pagina.fill('#correo', 'admin@planetafitness.ec');
 await pagina.fill('#contrasena', 'admin123');
 await pagina.click('#formulario-login-admin button[type="submit"]');
-await pagina.waitForURL(/admin\/index\.html/, { timeout: 8000 });
+await pagina.waitForURL(/admin\/index\.html/, { timeout: 20000 });
 comprobar('El administrador entra al dashboard', pagina.url().includes('index.html'));
-comprobar('El total de productos es 5', (await pagina.locator('[data-total-productos]').innerText()) === '5');
+// El resumen del dashboard se puebla de forma asíncrona con los cuatro JSON y
+// con IndexedDB: se espera a que los indicadores dejen su valor de arranque.
+await esperarTexto('[data-total-productos]', '5');
+comprobar(
+  'El total de productos es 5',
+  (await pagina.locator('[data-total-productos]').innerText()) === '5',
+  await pagina.locator('[data-total-productos]').innerText()
+);
+await esperarCantidad('[data-tabla-citas] tbody tr', 1);
 comprobar('Las citas registradas se listan', (await pagina.locator('[data-tabla-citas] tbody tr').count()) === 1);
 
 await pagina.goto(`${BASE}/admin/productos.html`, { waitUntil: 'networkidle' });
+await esperarCantidad('[data-tabla-productos] tr', 5);
 comprobar('La tabla de productos lista 5 filas', (await pagina.locator('[data-tabla-productos] tr').count()) === 5);
 await pagina.click('[data-tabla-productos] tr:first-child [data-editar]');
 await pagina.fill('#precio', '48');
 await pagina.click('#formulario-producto button[type="submit"]');
-await pagina.waitForTimeout(500);
+await esperarTextoEn('[data-tabla-productos] tr:first-child', '48.00');
 comprobar('El producto editado muestra el precio nuevo', (await pagina.locator('[data-tabla-productos] tr:first-child').innerText()).includes('48.00'));
 
 await pagina.goto(`${BASE}/index.html#tienda`, { waitUntil: 'networkidle' });
+await esperarTextoEn('[data-catalogo]', '$48.00');
 comprobar('El sitio público ve el cambio del administrador', (await pagina.locator('[data-catalogo]').innerText()).includes('$48.00'));
 
 /* ---------- 8 bis. Alta de un producto desde el panel ---------- */
@@ -440,7 +495,7 @@ await pagina.fill('#categoria', 'Accesorios');
 await pagina.fill('#precio', '35');
 await pagina.fill('#descripcion', 'Cinturon de cuero para pesos muertos usado en el area de pesas.');
 await pagina.click('#formulario-producto button[type="submit"]');
-await pagina.waitForTimeout(600);
+await esperarCantidad('[data-tabla-productos] tr', 6);
 comprobar('El producto nuevo aparece en la tabla', (await pagina.locator('[data-tabla-productos] tr').count()) === 6);
 comprobar(
   'El producto nuevo usa una imagen que existe',

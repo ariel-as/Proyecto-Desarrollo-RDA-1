@@ -46,28 +46,68 @@ jobs:
           echo "Sintaxis correcta en $(git ls-files '*.js' '*.mjs' | wc -l) archivos"
 
       - name: HTML5 y semántica
-        run: node pruebas/prueba-html.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-html.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Accesibilidad WCAG y ARIA
-        run: node pruebas/prueba-accesibilidad.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-accesibilidad.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Enlaces externos y rutas
-        run: node pruebas/prueba-enlaces.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-enlaces.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Lógica del carrito y planes
-        run: node pruebas/prueba-logica.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-logica.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Integridad de los datos
-        run: node pruebas/prueba-repo.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-repo.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Selectores del DOM
-        run: node pruebas/prueba-selectores.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-selectores.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Recorrido completo en navegador
-        run: node pruebas/prueba-navegador.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-navegador.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Diseño responsive y accesibilidad medida
-        run: node pruebas/prueba-responsive.mjs
+        run: |
+          codigo=0
+          node pruebas/prueba-responsive.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
   desplegar:
     name: Publicar en GitHub Pages
@@ -105,7 +145,12 @@ jobs:
       # Última revisión antes de publicar: comprueba sobre la copia final que no
       # hay rutas rotas ni destinos inseguros.
       - name: Validar el sitio preparado
-        run: node pruebas/prueba-enlaces.mjs _sitio
+        run: |
+          codigo=0
+          node pruebas/prueba-enlaces.mjs _sitio > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
 
       - name: Subir el artefacto
         uses: actions/upload-pages-artifact@v3
