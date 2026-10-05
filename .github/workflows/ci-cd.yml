@@ -93,6 +93,14 @@ jobs:
           grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
           exit $codigo
 
+      - name: Capas MVC, formularios y teclado
+        run: |
+          codigo=0
+          node pruebas/prueba-arquitectura.mjs > /tmp/salida.txt 2>&1 || codigo=$?
+          cat /tmp/salida.txt
+          grep '^FALLA' /tmp/salida.txt | sed -e 's/%/%25/g' -e 's/^/::error::/' || true
+          exit $codigo
+
       - name: Recorrido completo en navegador
         run: |
           codigo=0
