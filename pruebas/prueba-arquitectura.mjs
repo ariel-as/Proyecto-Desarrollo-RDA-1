@@ -222,7 +222,12 @@ comprobar('Los avisos dinámicos se anuncian en una región aria-live', /mostrar
 
 const panel = codigo.get('js/carrito-panel.js');
 comprobar('El panel del carrito se expone como diálogo modal', /role="dialog"/.test(panel) && /aria-modal="true"/.test(panel));
-comprobar('Al abrir el diálogo el foco entra en él', /\[data-cerrar-carrito\]'\)\?\.focus\(\)/.test(panel));
+comprobar('Al abrir un diálogo el foco entra en él', /enfocarEnDialogo\(panel\.querySelector\('\[data-cerrar-carrito\]'\)\)/.test(panel) && /enfocarEnDialogo\(modal\.querySelector\('#acceso-correo'\)\)/.test(panel));
+comprobar(
+  'El foco se reintenta hasta que el diálogo ya es visible',
+  /function\s+enfocarEnDialogo[\s\S]{0,400}document\.activeElement\s*===\s*elemento/.test(panel) &&
+    /requestAnimationFrame\(intentar\)/.test(panel)
+);
 comprobar('El diálogo recuerda qué tenía el foco para devolverlo', /focoAnterior\s*=\s*document\.activeElement/.test(panel));
 comprobar('Al cerrar, el foco vuelve al elemento que lo abrió', /devolverFoco[\s\S]{0,120}focoAnterior\.focus\(\)/.test(panel));
 comprobar('Tab queda atrapado dentro del diálogo abierto', /function\s+confinarFoco\s*\(/.test(panel) && /evento\.preventDefault\(\)/.test(panel));

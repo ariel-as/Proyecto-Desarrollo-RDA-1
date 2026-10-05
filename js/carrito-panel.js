@@ -262,6 +262,33 @@ function estaAbierto(nodo) {
   return nodo?.dataset.visible === 'true';
 }
 
+/**
+ * Enfoca un elemento de un diálogo recién abierto.
+ *
+ * El panel y el modal se muestran con una transición de `visibility`: mientras
+ * dura, el navegador los sigue considerando ocultos y `focus()` sobre un
+ * elemento invisible se descarta en silencio. Por eso no basta con pedir el
+ * foco en el siguiente fotograma: si el estilo aún no se ha calculado, la
+ * llamada se pierde y el teclado se queda en la página de fondo.
+ *
+ * Se reintenta un fotograma tras otro hasta que el foco entra de verdad o se
+ * agotan los intentos, de modo que el diálogo abierto siempre recibe el foco
+ * (WCAG 2.2 SC 2.4.3) sin depender del ritmo de refresco de cada equipo.
+ */
+function enfocarEnDialogo(elemento, intentos = 40) {
+  if (!elemento) return;
+  let restantes = intentos;
+
+  const intentar = () => {
+    elemento.focus();
+    if (document.activeElement === elemento || restantes <= 1) return;
+    restantes -= 1;
+    requestAnimationFrame(intentar);
+  };
+
+  requestAnimationFrame(intentar);
+}
+
 function abrirPanel() {
   const panel = document.querySelector('[data-panel-carrito]');
   if (!panel) return;
@@ -276,7 +303,7 @@ function abrirPanel() {
     boton.setAttribute('aria-expanded', 'true');
   });
 
-  panel.querySelector('[data-cerrar-carrito]')?.focus();
+  enfocarEnDialogo(panel.querySelector('[data-cerrar-carrito]'));
 }
 
 function cerrarPanel({ devolverFoco = true } = {}) {
@@ -302,7 +329,7 @@ function abrirModalAcceso() {
   alternarCapa(modal, true);
   alternarCapa(document.querySelector('[data-capa-acceso]'), true);
   document.body.classList.add('pf-bloquea-scroll');
-  modal.querySelector('#acceso-correo')?.focus();
+  enfocarEnDialogo(modal.querySelector('#acceso-correo'));
 }
 
 function cerrarModalAcceso({ devolverFoco = true } = {}) {

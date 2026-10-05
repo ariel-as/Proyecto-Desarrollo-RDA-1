@@ -324,21 +324,71 @@ comprobar(
 
 /* Foco del diálogo (WCAG 2.1.2, 2.4.3 y 2.4.7): al abrirse el foco entra en el
    panel, Tab da la vuelta dentro sin llegar a la página de fondo y al cerrarlo
-   el foco regressa al botón que lo abrió. */
-const focoEnPanel = () => pagina.evaluate(() => Boolean(document.querySelector('[data-panel-carrito]')?.contains(document.activeElement)));
-comprobar('Al abrir el panel el foco entra en el diálogo', await focoEnPanel());
-const controlesPanel = await pagina.evaluate(
-  () => document.querySelectorAll('[data-panel-carrito] a[href], [data-panel-carrito] button').length
-);
-for (let paso = 0; paso < controlesPanel + 2; paso += 1) {
+   el foco regresa al botón que lo abrió. */
+const FOCALIZABLES = "a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]:not([tabindex='-1'])";
+const limitesPanel = () =>
+  pagina.evaluate((selector) => {
+    const panel = document.querySelector('[data-panel-carrito]');
+    const focusables = [...panel.querySelectorAll(selector)].filter(
+      (nodo) => nodo.offsetParent !== null || nodo === document.activeElement
+    );
+    return {
+      total: focusables.length,
+      dentro: panel.contains(document.activeElement),
+      activoEsUltimo: focusables.length > 0 && document.activeElement === focusables[focusables.length - 1],
+      activoEsPrimero: focusables.length > 0 && document.activeElement === focusables[0]
+    };
+  }, FOCALIZABLES);
+const enfocarExtremo = (cual) =>
+  pagina.evaluate(
+    ([selector, extremo]) => {
+      const panel = document.querySelector('[data-panel-carrito]');
+      const focusables = [...panel.querySelectorAll(selector)].filter(
+        (nodo) => nodo.offsetParent !== null || nodo === document.activeElement
+      );
+      const nodo = extremo === 'ultimo' ? focusables[focusables.length - 1] : focusables[0];
+      nodo?.focus();
+    },
+    [FOCALIZABLES, cual]
+  );
+
+/* El foco entra tras la transición de visibilidad, así que se espera a que
+   llegue en lugar de dar por hecho que ya está dentro. */
+const esperarFocoEnPanel = async () => {
+  try {
+    await pagina.waitForFunction(
+      () => Boolean(document.querySelector('[data-panel-carrito]')?.contains(document.activeElement)),
+      null,
+      { timeout: 2000 }
+    );
+    return true;
+  } catch {
+    return false;
+  }
+};
+
+let limites = await limitesPanel();
+comprobar('Al abrir el panel el foco entra en el diálogo', (await esperarFocoEnPanel()) && limites.dentro);
+limites = await limitesPanel();
+
+for (let paso = 0; paso < limites.total + 3; paso += 1) {
   await pagina.keyboard.press('Tab');
-  if (!(await focoEnPanel())) break;
+  limites = await limitesPanel();
+  if (!limites.dentro) break;
 }
-comprobar(`Tab recorre los ${controlesPanel} controles del panel sin salir de él`, await focoEnPanel());
+comprobar(`Tab recorre los ${limites.total} controles del panel sin salir de él`, limites.dentro, JSON.stringify(limites));
+
+await enfocarExtremo('ultimo');
+limites = await limitesPanel();
+comprobar('Se puede enfocar el último control del panel', limites.activoEsUltimo);
+await pagina.keyboard.press('Tab');
+limites = await limitesPanel();
+comprobar('Tab en el último control vuelve al primero sin salir del diálogo', limites.activoEsPrimero && limites.dentro);
+
+await enfocarExtremo('primero');
 await pagina.keyboard.press('Shift+Tab');
-comprobar('Shift+Tab tampoco saca el foco del panel abierto', await focoEnPanel());
-await pagina.keyboard.press('Shift+Tab');
-comprobar('Shift+Tab vuelve al primer control al llegar al último', await focoEnPanel());
+limites = await limitesPanel();
+comprobar('Shift+Tab en el primer control vuelve al último sin salir del diálogo', limites.activoEsUltimo && limites.dentro);
 
 await pagina.click('[data-panel-lineas] li:first-child [data-sumar]');
 await pagina.waitForTimeout(200);
