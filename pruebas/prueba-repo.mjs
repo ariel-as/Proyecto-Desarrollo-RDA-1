@@ -48,21 +48,21 @@ function comprobar(descripcion, condicion) {
 }
 
 const base = await obtenerProductos();
-comprobar('El JSON entrega 5 productos', base.datos.length === 5);
+comprobar('El JSON entrega 10 productos', base.datos.length === 10);
 comprobar('El origen inicial es fetch', base.origen === 'fetch');
 
-// El administrador actualiza el precio de la creatina, elimina las barras
-// y agrega un producto nuevo.
+// El administrador actualiza el precio de la creatina, elimina la barra
+// proteica y agrega un producto nuevo.
 escribirCambios('productos', {
-  agregados: [{ id: 99, nombre: 'Producto de prueba', categoria: 'Prueba', precio: 10, descripcion: 'Agregado desde el dashboard.', imagen: 'assets/img/productos/proteina.svg', destacado: false }],
+  agregados: [{ id: 99, nombre: 'Producto de prueba', categoria: 'Prueba', precio: 10, descripcion: 'Agregado desde el dashboard.', imagen: 'assets/img/productos/generico.svg', destacado: false }],
   actualizados: { 2: { precio: 30 } },
-  eliminados: [3]
+  eliminados: [4]
 });
 
 const modificado = await obtenerProductos();
-comprobar('El cambio del admin no crea duplicados', modificado.datos.length === 5);
-comprobar('Se eliminó el producto 3', !modificado.datos.some((p) => p.id === 3));
-comprobar('Se actualizó el precio de la creatina', modificado.datos.find((p) => p.id === 2).precio === 30);
+comprobar('El cambio del admin no crea duplicados', modificado.datos.length === 10);
+comprobar('Se eliminó el producto 4', !modificado.datos.some((p) => p.id === 4));
+comprobar('Se actualizó el precio de la whey protein', modificado.datos.find((p) => p.id === 2).precio === 30);
 comprobar('Se agregó el producto nuevo', modificado.datos.some((p) => p.id === 99));
 
 // El resto del catálogo sigue igual.

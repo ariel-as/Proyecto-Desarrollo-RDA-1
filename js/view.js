@@ -37,7 +37,10 @@ export function rutaArchivo(ruta) {
    Tarjetas reutilizables
    ========================================================= */
 
-/** Tarjeta de producto del ecommerce. */
+/** Tarjeta de producto del ecommerce.
+ *  El nombre va en <h4> porque cada producto cuelga del <h3> de su categoría
+ *  (`seccionCategoriaTienda`); con <h3> los productos quedaban como hermanos de
+ *  su propia sección en lugar de subordinados a ella (WCAG 2.2 SC 1.3.1). */
 export function tarjetaProducto(producto) {
   return `
     <article class="pf-tarjeta h-full flex flex-col overflow-hidden" data-producto="${escapar(
@@ -48,11 +51,11 @@ export function tarjetaProducto(producto) {
         src="${escapar(rutaArchivo(producto.imagen))}"
         alt="${escapar(producto.nombre)} de Planeta Fitness"
         loading="lazy"
-        width="600"
-        height="450">
+        width="800"
+        height="800">
       <div class="flex flex-col gap-3 p-5 flex-1">
         <p class="pf-etiqueta">${escapar(producto.categoria)}</p>
-        <h3 class="text-lg font-bold text-white">${escapar(producto.nombre)}</h3>
+        <h4 class="text-lg font-bold text-white">${escapar(producto.nombre)}</h4>
         <p class="text-sm text-neutral-300 flex-1">${escapar(producto.descripcion)}</p>
         <p class="text-2xl font-extrabold text-pf-amarillo">${formatearPrecio(producto.precio)}</p>
         <button
@@ -137,7 +140,9 @@ export function tarjetaPlan(plan) {
     </article>`;
 }
 
-/** Tarjeta de servicio del gimnasio. */
+/** Tarjeta de servicio del gimnasio.
+ *  El nombre va en <h4>: cuelga del <h3> «Servicios» de `index.html`
+ *  (WCAG 2.2 SC 1.3.1). */
 export function tarjetaServicio(servicio) {
   return `
     <article class="pf-tarjeta h-full flex flex-col overflow-hidden">
@@ -149,7 +154,7 @@ export function tarjetaServicio(servicio) {
         width="600"
         height="450">
       <div class="flex flex-col gap-2 p-5 flex-1">
-        <h3 class="text-lg font-bold text-white">${escapar(servicio.nombre)}</h3>
+        <h4 class="text-lg font-bold text-white">${escapar(servicio.nombre)}</h4>
         <p class="text-sm text-neutral-300">${escapar(servicio.descripcion)}</p>
       </div>
     </article>`;
@@ -196,7 +201,9 @@ export function tarjetaClase(clase, entrenador) {
     </article>`;
 }
 
-/** Tarjeta de entrenador. */
+/** Tarjeta de entrenador.
+ *  El nombre va en <h4>: cuelga del <h3> «Entrenadores» de `index.html`, igual
+ *  que los servicios cuelgan de su <h3> «Servicios» (WCAG 2.2 SC 1.3.1). */
 export function tarjetaEntrenador(entrenador) {
   return `
     <article class="pf-tarjeta h-full flex flex-col overflow-hidden" data-entrenador="${escapar(
@@ -210,7 +217,7 @@ export function tarjetaEntrenador(entrenador) {
         width="600"
         height="450">
       <div class="flex flex-col gap-2 p-5 flex-1">
-        <h3 class="text-lg font-bold text-white">${escapar(entrenador.nombre)}</h3>
+        <h4 class="text-lg font-bold text-white">${escapar(entrenador.nombre)}</h4>
         <p class="pf-etiqueta self-start">${escapar(entrenador.especialidad)}</p>
         <p class="text-sm text-neutral-300">${escapar(entrenador.descripcion)}</p>
       </div>

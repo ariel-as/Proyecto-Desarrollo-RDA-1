@@ -16,7 +16,7 @@
   <header class="pf-encabezado border-b border-pf-linea bg-pf-negro">
     <nav class="pf-nav mx-auto max-w-6xl px-4" aria-label="Navegación principal">
       <a href="../index.html" class="pf-logo" aria-label="Planeta Fitness, ir al inicio">
-        <img src="../assets/img/logo/logo.svg" alt="Planeta Fitness" width="180" height="50">
+        <img src="../assets/img/logo/logo-planeta.png" alt="Planeta Fitness" width="112" height="101">
       </a>
 
       <div id="menu-principal" data-menu class="pf-menu">
@@ -48,6 +48,7 @@
         type="button"
         class="pf-boton pf-boton-primario pf-carrito"
         data-abrir-carrito
+        aria-label="Carrito de compras, vacío"
         aria-expanded="false"
         aria-controls="panel-carrito">
         <span aria-hidden="true">&#128722;</span>
@@ -59,6 +60,7 @@
         type="button"
         class="pf-boton pf-boton-secundario pf-menu-boton"
         data-menu-boton
+        aria-label="Abrir menú de navegación"
         aria-expanded="false"
         aria-controls="menu-principal">
         <span aria-hidden="true">&#9776;</span> <span class="pf-menu-boton-texto">Menú</span>
@@ -164,7 +166,7 @@
 
   <footer class="mt-12 border-t border-pf-linea bg-pf-negro py-10">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-6 px-4">
-      <img src="../assets/img/logo/logo-blanco.svg" alt="Planeta Fitness" width="180" height="50" class="h-10 w-auto">
+        <img src="../assets/img/logo/logo-planeta.png" alt="Planeta Fitness" width="112" height="101" class="h-24 w-auto">
       <nav aria-label="Pie de página">
         <ul class="flex flex-wrap gap-4 text-sm">
           <li><a href="../index.html" class="underline hover:text-pf-amarillo">Inicio</a></li>
@@ -181,7 +183,7 @@
     </div>
   </footer>
 
-  <aside class="pf-aviso pf-foco-claro border border-pf-linea p-4 text-sm text-white" data-aviso-cookies aria-label="Aviso de cookies">
+  <aside class="pf-aviso pf-foco-claro border border-pf-linea p-4 text-sm text-white" data-aviso-cookies aria-label="Aviso de cookies" hidden>
     <p>Este sitio utiliza cookies para mejorar tu experiencia.</p>
     <button type="button" class="pf-boton pf-boton-primario mt-2" data-aceptar-cookies>Entendido</button>
   </aside>

@@ -64,7 +64,15 @@ const selectTodos = (selector) => [...document.querySelectorAll(selector)];
    1. Comportamiento común a todas las páginas
    ========================================================= */
 
-/** Muestra el aviso de cookies solo si la persona todavía no lo ha cerrado. */
+/**
+ * Muestra el aviso de cookies solo si la persona todavía no lo ha cerrado.
+ *
+ * El aviso llega en el HTML con `hidden` a propósito. Antes venía visible y
+ * `js/app.js` lo escondía al leer la cookie, así que en cada recarga se veía
+ * aparecer un instante y desaparecer: quien ya había pulsado «Entendido»
+ * pensaba que el aviso volvía. Oculto desde el principio, el módulo lo enseña
+ * solo en la primera visita; el resto de las cargas ni lo pintan.
+ */
 function iniciarAvisoCookies() {
   const aviso = select('[data-aviso-cookies]');
   if (!aviso) return;
@@ -73,6 +81,8 @@ function iniciarAvisoCookies() {
     aviso.hidden = true;
     return;
   }
+
+  aviso.hidden = false;
 
   const boton = select('[data-aceptar-cookies]');
   boton?.addEventListener('click', () => {
@@ -113,6 +123,13 @@ function confinarFocoEnMenu(menu, boton, evento) {
  * Controla el menú desplegable de pantallas pequeñas.
  * El menú se muestra como un panel flotante bajo el encabezado: se superpone
  * al contenido con un borde redondeado y nunca empuja el resto de la página.
+ *
+ * El botón lleva su nombre accesible en el HTML (`aria-label`) porque por
+ * debajo de 375 px la hoja de estilos oculta el rótulo «Menú» con
+ * `display: none` y el icono va marcado como decorativo: sin ese atributo el
+ * botón se anunciaría solo como «botón». Aquí el nombre se sincroniza con el
+ * estado, para que al leer `aria-expanded` no haya contradicción con lo que
+ * anuncia (WCAG 2.2 SC 4.1.2).
  */
 function iniciarMenuMovil() {
   const boton = select('[data-menu-boton]');
@@ -121,11 +138,13 @@ function iniciarMenuMovil() {
 
   const abrir = () => {
     boton.setAttribute('aria-expanded', 'true');
+    boton.setAttribute('aria-label', 'Cerrar menú de navegación');
     menu.classList.add('pf-menu-abierto');
   };
 
   const cerrar = ({ devolverFoco = false } = {}) => {
     boton.setAttribute('aria-expanded', 'false');
+    boton.setAttribute('aria-label', 'Abrir menú de navegación');
     menu.classList.remove('pf-menu-abierto');
     if (devolverFoco) boton.focus();
   };
@@ -189,28 +208,139 @@ function iniciarEncabezadoFijo() {
   actualizar();
 }
 
-/**
- * Marca como activo el enlace de la sección que se está viendo.
- * Usa IntersectionObserver y, como respaldo, la posición del scroll.
- */
-function iniciarNavegacionActiva() {
-  const enlaces = selectTodos('[data-menu] a[href^="#"]');
-  if (enlaces.length === 0) return;
+/** Alto del encabezado fijo, más un pequeño margen de respiración. */
+function alturaEncabezado() {
+  const encabezado = select('.pf-encabezado');
+  if (!encabezado) return 0;
+  return Math.ceil(encabezado.getBoundingClientRect().height) + 8;
+}
 
-  const porHash = new Map(enlaces.map((enlace) => [enlace.getAttribute('href'), enlace]));
-  const secciones = [...porHash.keys()]
-    .map((hash) => document.querySelector(hash))
-    .filter(Boolean);
+/**
+ * Navegación interna de la página de inicio.
+ *
+ * El salto nativo del navegador a un ancla ocurre mientras la página todavía
+ * muestra los marcadores «Cargando información...». Al inyectarse el catálogo,
+ * las secciones de arriba crecen y el destino se desplaza, de modo que la
+ * sección pedida quedaba a miles de píxeles y quien navegaba aterrizaba en
+ * otra (Rutinas terminaba en Tienda, Tienda en Planes, y así con todas).
+ *
+ * Aquí el salto lo hace el código: se calcula el desplazamiento con la
+ * posición real de la sección en el momento del clic, y se vuelve a alinear
+ * cuando los datos y las imágenes ya han cambiado el alto del documento.
+ */
+function iniciarNavegacionSecciones() {
+  const enlacesMenu = selectTodos('[data-menu] a[href^="#"]');
+  const enlacesInternos = selectTodos('main a[href^="#"], footer a[href^="#"]');
+  const enlaces = [...new Set([...enlacesMenu, ...enlacesInternos])];
+  if (enlacesMenu.length === 0) return;
+
+  const ids = [...new Set(enlaces.map((enlace) => enlace.getAttribute('href').slice(1)))].filter(Boolean);
+  // El orden del documento importa: `elegir()` supone que van de arriba abajo.
+  const secciones = ids
+    .map((id) => document.getElementById(id))
+    .filter(Boolean)
+    .sort((a, b) => a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1);
   if (secciones.length === 0) return;
 
+  /**
+   * Lleva la vista a una sección dejando su título por debajo del encabezado.
+   * El salto es instantáneo a propósito: al navegar de Inicio a Nutrición (o
+   * desde Inscripción a Rutinas) la barra recorría toda la página y el
+   * desplazamiento animado mareaba más de lo que ayudaba. `instant` es
+   * necesario porque `html` declara `scroll-behavior: smooth`, que si no
+   * convertiría hasta un `behavior: "auto"` en salto animado.
+   */
+  const irA = (id) => {
+    const seccion = document.getElementById(id);
+    if (!seccion) return false;
+
+    const superior = Math.max(
+      window.scrollY + seccion.getBoundingClientRect().top - alturaEncabezado(),
+      0
+    );
+
+    window.scrollTo({ top: superior, left: 0, behavior: 'instant' });
+    return true;
+  };
+
+  /**
+   * Vuelve a colocar la vista donde dice la barra de direcciones. Se invoca
+   * tras pintar los datos y al terminar de cargar la página, que es cuando las
+   * secciones alcanzan su alto definitivo.
+   */
+  const alinearConHash = () => {
+    const id = window.location.hash.slice(1);
+    if (!id) return;
+    if (irA(id)) marcar(id);
+  };
+
+  /** Aplica el hash actual (o el inicio de la página si no hay ninguno). */
+  const sincronizar = () => {
+    const id = window.location.hash.slice(1);
+    if (!id) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      marcar(secciones[0].id);
+      return;
+    }
+    if (irA(id)) marcar(id);
+  };
+
+  /** Resalta en el menú el enlace de la sección que se está viendo. */
   const marcar = (id) => {
-    enlaces.forEach((enlace) => {
+    enlacesMenu.forEach((enlace) => {
       const activo = enlace.getAttribute('href') === `#${id}`;
       enlace.classList.toggle('pf-enlace-activo', activo);
       if (activo) enlace.setAttribute('aria-current', 'location');
       else enlace.removeAttribute('aria-current');
     });
   };
+
+  /**
+   * Destapa la página cuando la posición ya es la definitiva.
+   *
+   * Al llegar con un ancla (`index.html#rutinas` desde Inscripción, por ejemplo)
+   * `index.html` oculta el cuerpo con `pf-posicion-pendiente`: sin eso se veía un
+   * fogonazo del inicio, porque hasta que el catálogo no está pintado la altura
+   * real de la sección es otra. Se quita en cuanto `alinearConHash()` deja la
+   * sección bajo el encabezado.
+   */
+  const revelarPagina = () => {
+    document.documentElement.classList.remove('pf-posicion-pendiente');
+  };
+
+  /* Todo enlace interno (menú, botones del hero y pie) salta a su sección. */
+  document.addEventListener('click', (evento) => {
+    if (evento.defaultPrevented || evento.button !== 0) return;
+    if (evento.metaKey || evento.ctrlKey || evento.shiftKey || evento.altKey) return;
+
+    const enlace = evento.target.closest('a[href^="#"]');
+    if (!enlace || enlace.hasAttribute('download')) return;
+
+    const id = enlace.getAttribute('href').slice(1);
+    if (!id || !document.getElementById(id)) return;
+
+    evento.preventDefault();
+
+    // «Inicio» se representa sin ancla: es la dirección limpia de la página.
+    const hash = id === 'inicio' ? '' : `#${id}`;
+    if (window.location.hash !== hash) {
+      history.pushState(null, '', hash || window.location.pathname);
+    }
+
+    if (id === 'inicio') {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    } else {
+      irA(id);
+    }
+    marcar(id);
+  });
+
+  /* Atrás/adelante y cambios de ancla hechos a mano se respetan. */
+  window.addEventListener('popstate', sincronizar);
+  window.addEventListener('hashchange', sincronizar);
+
+  /* Las imágenes y el catálogo cambian el alto del documento al cargar. */
+  window.addEventListener('load', () => requestAnimationFrame(alinearConHash));
 
   const elegir = () => {
     const linea = window.innerHeight * 0.4;
@@ -242,6 +372,8 @@ function iniciarNavegacionActiva() {
   }, { passive: true });
 
   elegir();
+
+  return { alinearConHash, revelarPagina };
 }
 
 /** Botón de cierre de sesión presente en las páginas del cliente. */
@@ -394,12 +526,24 @@ function iniciarFormularioContacto() {
 async function iniciarPaginaInicio() {
   const region = select('#mensaje-dinamico');
 
-  await pintarDatosGimnasio();
-  await pintarPlanes(region);
-  await pintarCatalogoProductos(region);
-  await pintarClases(region);
-  iniciarFormularioContacto();
-  iniciarNavegacionActiva();
+  // Los enlaces se conectan antes de pintar: así un clic nunca cae en el
+  // salto nativo del navegador, que es el que devolvía otra sección.
+  const navegacion = iniciarNavegacionSecciones();
+
+  try {
+    await pintarDatosGimnasio();
+    await pintarPlanes(region);
+    await pintarCatalogoProductos(region);
+    await pintarClases(region);
+    iniciarFormularioContacto();
+  } finally {
+    // El catálogo ya ocupa su alto real: el destino del ancla es el bueno.
+    navegacion?.alinearConHash();
+    // Solo ahora se muestra la página, ya en la sección pedida y sin el
+    // fogonazo del inicio. El respaldo del script de `index.html` cubre el
+    // caso de que este módulo llegara a fallar antes de llegar aquí.
+    navegacion?.revelarPagina();
+  }
 }
 
 /* =========================================================

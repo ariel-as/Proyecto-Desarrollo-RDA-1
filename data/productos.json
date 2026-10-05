@@ -1,47 +1,92 @@
 [
   {
     "id": 1,
-    "nombre": "Proteína",
+    "nombre": "Whey Protein",
     "categoria": "Suplementos",
-    "precio": 45,
-    "descripcion": "Proteína para complementar la alimentación deportiva.",
-    "imagen": "assets/img/productos/proteina.jpg",
+    "precio": 61.99,
+    "descripcion": "Proteína de suero de leche sabor chocolate, 2 lb (907 g). Aporta 24 g de proteína por servicio para la recuperación muscular.",
+    "imagen": "assets/img/productos/whey-protein.jpg",
     "destacado": true
   },
   {
     "id": 2,
-    "nombre": "Creatina",
+    "nombre": "Whey Protein 2LB Chocolate",
     "categoria": "Suplementos",
-    "precio": 25,
-    "descripcion": "Creatina para apoyar el desarrollo de fuerza.",
-    "imagen": "assets/img/productos/creatina.jpg",
+    "precio": 66.99,
+    "descripcion": "Whey protein concentrado sabor chocolate, 2 lb (907 g). Se mezcla con agua o leche y se toma después de entrenar.",
+    "imagen": "assets/img/productos/whey-protein-2lb-chocolate.jpg",
     "destacado": true
   },
   {
     "id": 3,
-    "nombre": "Barras energéticas",
+    "nombre": "Creatina",
     "categoria": "Suplementos",
-    "precio": 18,
-    "descripcion": "Barras energéticas para consumir antes o después del entrenamiento.",
-    "imagen": "assets/img/productos/barras-energeticas.jpg",
+    "precio": 24.99,
+    "descripcion": "Creatina monohidrato en polvo, 500 g. Apoya el aumento de fuerza y de masa muscular en la sala de pesas.",
+    "imagen": "assets/img/productos/creatina.jpg",
     "destacado": true
   },
   {
     "id": 4,
-    "nombre": "Camisetas deportivas",
-    "categoria": "Ropa",
-    "precio": 30,
-    "descripcion": "Camisetas deportivas del gimnasio. Tallas S, M, L y XL.",
-    "imagen": "assets/img/productos/camisetas-deportivas.jpg",
+    "nombre": "Barra Proteica",
+    "categoria": "Suplementos",
+    "precio": 1.5,
+    "descripcion": "Barra de 45 g con 15 g de proteína. Snack práctico para consumir entre comidas o antes de entrenar.",
+    "imagen": "assets/img/productos/barra-proteica.jpg",
     "destacado": false
   },
   {
     "id": 5,
-    "nombre": "Shorts deportivos",
+    "nombre": "Short Deportivo",
     "categoria": "Ropa",
-    "precio": 28,
-    "descripcion": "Shorts deportivos del gimnasio. Tallas S, M, L y XL.",
-    "imagen": "assets/img/productos/shorts-deportivas.jpg",
+    "precio": 15.5,
+    "descripcion": "Short de entrenamiento en tejido transpirable con cordón y bolsillo lateral. Tallas S, M, L y XL.",
+    "imagen": "assets/img/productos/short-deportivo.jpg",
     "destacado": false
+  },
+  {
+    "id": 6,
+    "nombre": "Short Gymshark",
+    "categoria": "Ropa",
+    "precio": 25.99,
+    "descripcion": "Short de entrenamiento de la marca Gymshark, con corte anatómico y cinta reflectante. Tallas S, M, L y XL.",
+    "imagen": "assets/img/productos/short-gymshark.jpg",
+    "destacado": false
+  },
+  {
+    "id": 7,
+    "nombre": "Buzo de Compresión",
+    "categoria": "Ropa",
+    "precio": 39.99,
+    "descripcion": "Buzo de compresión de manga larga con costuras planas y cierre storm flap. Tallas S, M, L y XL.",
+    "imagen": "assets/img/productos/buzo-compresion.jpg",
+    "destacado": true
+  },
+  {
+    "id": 8,
+    "nombre": "Straps",
+    "categoria": "Accesorios",
+    "precio": 5.99,
+    "descripcion": "Par de straps de cuero para levantar peso muerto y press banca. Ayudan a no soltar la barra en series pesadas.",
+    "imagen": "assets/img/productos/straps.jpg",
+    "destacado": false
+  },
+  {
+    "id": 9,
+    "nombre": "Muñequeras",
+    "categoria": "Accesorios",
+    "precio": 5.3,
+    "descripcion": "Cinta de acolchado para muñecas. Protege las articulaciones en los ejercicios de peso y evita que la venda se deslice.",
+    "imagen": "assets/img/productos/munequeras.jpg",
+    "destacado": false
+  },
+  {
+    "id": 10,
+    "nombre": "Cinturón de Cuero",
+    "categoria": "Accesorios",
+    "precio": 33.4,
+    "descripcion": "Cinturón de cuero de 10 cm con hebilla para levantar peso muerto. Sostiene la columna con pesos altos.",
+    "imagen": "assets/img/productos/cinturon-cuero.jpg",
+    "destacado": true
   }
 ]
