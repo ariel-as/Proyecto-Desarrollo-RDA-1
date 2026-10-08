@@ -61,6 +61,36 @@ const select = (selector) => document.querySelector(selector);
 const selectTodos = (selector) => [...document.querySelectorAll(selector)];
 
 /* =========================================================
+   0. Gestión de ancla inicial (movido desde index.html)
+   ========================================================= */
+
+/* Llegar con un ancla (#rutinas, #planes…) no puede resolverse con el salto
+   nativo del navegador: cuando el documento termina de analizarse el
+   catálogo, las clases y los planes todavía no están pintados, así que la
+   altura de la página casi se duplica después. El navegador pintaba primero
+   el inicio y acto seguido saltaba a la sección, ese fogonazo de un instante.
+   Aquí se oculta el cuerpo (sin sacarlo de la maqueta) para que la primera
+   imagen que se ve sea ya la sección pedida. `js/app.js` quita la clase al
+   terminar de pintar los datos; los dos respaldos de abajo la quitan
+   también si el módulo llegara a fallar o si `load` se retrasara de
+   demasiado, para no dejar la página invisible. */
+if (location.hash) {
+  document.documentElement.classList.add('pf-posicion-pendiente');
+
+  // Rescate incondicional: si una imagen pesada o el CDN de Tailwind se
+  // cuelgan, `load` puede tardar mucho y el cuerpo seguiría oculto.
+  setTimeout(function () {
+    document.documentElement.classList.remove('pf-posicion-pendiente');
+  }, 800);
+
+  addEventListener('load', function () {
+    setTimeout(function () {
+      document.documentElement.classList.remove('pf-posicion-pendiente');
+    }, 600);
+  });
+}
+
+/* =========================================================
    1. Comportamiento común a todas las páginas
    ========================================================= */
 
