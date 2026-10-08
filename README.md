@@ -1,172 +1,159 @@
 # Planeta Fitness — Ecommerce web
 
-Proyecto académico de la asignatura **Desarrollo en Plataformas** (RDA 1). Consiste en un sitio
-web tipo ecommerce para **Planeta Fitness**, un gimnasio ubicado en Quito, Ecuador.
+Proyecto académico de la asignatura **Desarrollo en Plataformas** (RDA 1). Consiste en un sitio web tipo ecommerce para **Planeta Fitness**, un gimnasio ubicado en Quito, Ecuador.
+
+## Descripción y objetivo del proyecto
+
+Planeta Fitness es un gimnasio con dos pisos, clases de boxeo y bailoterapia, rutinas personalizadas según nivel y una sección de nutrición con cita previa.
+
+El objetivo del proyecto es aplicar los conocimientos trabajados en clase (HTML5 semántico, CSS3, JavaScript ES6+, formularios, validaciones, expresiones regulares, DOM, eventos, Fetch API, JSON, Web Storage, cookies, IndexedDB, accesibilidad y patrón MVC) para desarrollar un ecommerce completamente funcional en frontend.
 
 El sitio tiene dos áreas separadas:
 
-- **Área pública / cliente** (Tailwind CSS): una **página única** (`index.html`) con secciones
-  internas (`#inicio`, `#planes`, `#tienda`, `#clases`, `#rutinas`, `#nutricion`, `#contacto`), más
-  las páginas independientes de nutrición, login y checkout. El carrito es un **panel lateral**
-  disponible en todo el sitio.
-- **Área administrativa** (Bootstrap 5): dashboard para gestionar productos, planes, clases,
-  entrenadores y las citas de nutrición.
+- **Área pública / cliente:** una **página única** (`index.html`) con secciones internas (`#inicio`, `#planes`, `#tienda`, `#clases`, `#rutinas`, `#nutricion`, `#contacto`), más las páginas independientes `cliente/nutricion.html`, `cliente/login.html` y `cliente/checkout.html`. El carrito es un **panel lateral** disponible en todo el sitio.
+- **Área administrativa:** dashboard para gestionar productos, planes, clases, entrenadores y las citas de nutrición, con sus propias páginas en `admin/`.
 
-No hay backend ni base de datos remota: toda la información del catálogo vive en archivos JSON
-locales y en el almacenamiento del navegador.
+No hay backend ni base de datos remota: toda la información del catálogo vive en archivos JSON locales y en el almacenamiento del navegador.
 
----
-
-## Descripción
-
-Planeta Fitness es un gimnasio con dos pisos, clases de boxeo y bailoterapia, rutinas personalizadas
-según nivel y una sección de nutrición con cita previa.
-
-El sitio resuelve dos necesidades:
-
-1. Que el cliente se informe y contrate planes, consulte horarios, agende una cita de nutrición y
-   compre productos del gimnasio (suplementos y ropa deportiva) con un carrito que no se pierde al
-   recargar la página.
-2. Que el administrador mantenga esa información sin editar código: agregar, editar o eliminar
-   productos, actualizar los planes, cambiar los horarios de las clases y asociar entrenadores.
-
-Los datos reales del gimnasio se respetan tal como fueron proporcionados: tres planes
-($35, $60 y $85), boxeo lunes/jueves/viernes de 07:00 a 09:00, bailoterapia martes y jueves de
-18:30 a 20:30, lunes a viernes de 06:00 a 21:00, sábado de 09:00 a 12:00 y domingo cerrado. La asesoría
-nutricional **no tiene precio publicado**: el sitio indica que requiere cita y que el precio se
-consulta en el gimnasio.
+Los datos reales del gimnasio se respetan tal como fueron proporcionados: tres planes ($35, $60 y $85), boxeo lunes/jueves/viernes de 07:00 a 09:00, bailoterapia martes y jueves de 18:30 a 20:30, atención de lunes a viernes de 06:00 a 21:00, sábado de 09:00 a 12:00 y domingo cerrado. La asesoría nutricional **no tiene precio publicado**: el sitio indica que requiere cita y que el precio se consulta en el gimnasio.
 
 ---
 
 ## Tecnologías
 
+### Tecnologías utilizadas
+
 - **HTML5 semántico** (`header`, `nav`, `main`, `section`, `article`, `aside`, `footer`, `figure`).
-- **CSS3** con enfoque mobile-first, Flexbox, Grid y Media Queries.
-- **Tailwind CSS** para el área cliente (CDN).
-- **Bootstrap 5** para el dashboard administrativo (CDN).
-- **JavaScript ES6+** con módulos nativos (`import` / `export`), clases, funciones flecha,
-  promesas y `async/await`.
+- **Formularios HTML5**, validación nativa HTML5, **expresiones regulares** y validación personalizada con JavaScript.
+- **CSS3** con enfoque **mobile-first**, **Flexbox**, **Grid** y **media queries** para diseño **responsive**.
+- **JavaScript ES6+**: módulos nativos (`import`/`export`), funciones, clases, funciones flecha, promesas, `async/await`, manipulación del **DOM**, **eventos** y control de flujo.
 - **JSON** local como fuente de datos.
-- **Fetch API** para leer los JSON.
-- **localStorage**, **sessionStorage**, **IndexedDB** y **cookies** para persistencia.
-- **Expresiones regulares** y validación nativa HTML5 en los formularios.
-- **ARIA** (`aria-live`, `aria-busy`, `aria-invalid`, `aria-describedby`, `aria-label`).
-
-Tailwind y Bootstrap no se mezclan dentro de la misma interfaz:
-
-```text
-Cliente       → Tailwind CSS
-Administrador → Bootstrap
-```
+- **Fetch API** para cargar datos desde archivos JSON.
+- **Web Storage** (`localStorage` y `sessionStorage`), **cookies** e **IndexedDB** para persistencia de datos en el navegador.
+- **Accesibilidad web (WCAG)**: uso de **ARIA** (`aria-live`, `aria-busy`, `aria-invalid`, `aria-describedby`, `aria-label`, `aria-current`, `aria-modal`), navegación por teclado, gestión del foco, contraste adecuado y textos alternativos.
+- **jQuery**: utilizado únicamente para manipulación del DOM y gestión de eventos, según el alcance del proyecto.
+- **Patrón MVC** (Modelo–Vista–Controlador) aplicado con modularidad en frontend mediante módulos ES.
 
 ---
 
-## Estructura
+## Estructura de carpetas
 
 ```text
 PROYECTO_RDA_1/
 │
-├── index.html                Página principal (entrada al ecommerce)
+├── index.html
 ├── README.md
 │
 ├── assets/
 │   ├── css/
-│   │   └── styles.css        Componentes propios, encabezado, tarjetas de clases y tienda, panel y foco visible
+│   │   └── styles.css
 │   ├── icons/
 │   │   └── favicon.svg
 │   ├── js/
-│   │   └── identidad.js      Paleta de marca de Tailwind (bg-pf-*, text-pf-*)
+│   │   └── identidad.js
 │   └── img/
-│       ├── logo/             Logo del gimnasio
-│       ├── productos/        Fotos del catálogo (JPG)
-│       ├── gimnasio/         Hero, pesas, cardio y nutrición (JPG)
-│       ├── clases/           Boxeo y bailoterapia (JPG)
-│       └── entrenadores/     Los 3 entrenadores (JPG)
+│       ├── logo/
+│       ├── productos/
+│       ├── gimnasio/
+│       ├── clases/
+│       └── entrenadores/
 │
 ├── data/
-│   ├── productos.json        Productos del ecommerce
-│   ├── planes.json           Los 3 planes
-│   ├── clases.json           Clases con días y horas
-│   ├── entrenadores.json     Los 3 entrenadores
-│   └── gimnasio.json         Identidad, horarios, servicios, niveles y usuarios de prueba
+│   ├── productos.json
+│   ├── planes.json
+│   ├── clases.json
+│   ├── entrenadores.json
+│   └── gimnasio.json
 │
 ├── js/
-│   ├── app.js                Controlador de las páginas del cliente
-│   ├── repo.js               Modelo: Fetch + IndexedDB + cambios del admin
-│   ├── view.js               Vista: tarjetas y helpers de presentación
-│   ├── cart.js               Carrito y cálculos
-│   ├── carrito-panel.js      Panel lateral del carrito y modal de acceso
-│   ├── auth.js               Sesión y roles
-│   ├── validation.js         Validación HTML5 + JavaScript + regex
-│   ├── storage.js            localStorage, sessionStorage, cookies
-│   ├── indexeddb.js          Base de datos local (PlanetaFitnessDB)
-│   └── admin.js              Controlador del dashboard
+│   ├── app.js
+│   ├── repo.js
+│   ├── view.js
+│   ├── cart.js
+│   ├── carrito-panel.js
+│   ├── auth.js
+│   ├── validation.js
+│   ├── storage.js
+│   ├── indexeddb.js
+│   └── admin.js
 │
 ├── cliente/
-│   ├── checkout.html         Datos del cliente, resumen y confirmación del pedido
+│   ├── checkout.html
 │   ├── nutricion.html
 │   └── login.html
 │
 ├── admin/
 │   ├── login.html
-│   ├── index.html            Dashboard
+│   ├── index.html
 │   ├── productos.html
 │   ├── planes.html
 │   ├── clases.html
 │   └── entrenadores.html
 │
 └── pruebas/
-    ├── servidor.mjs             Servidor estático que usa la prueba de navegador
-    ├── prueba-logica.mjs        Carrito y validaciones
-    ├── prueba-repo.mjs          Fetch, cambios del admin y respaldo en IndexedDB
-    ├── prueba-selectores.mjs    Selectores de cada página e imágenes existentes
-    └── prueba-navegador.mjs     Recorrido completo en Chromium (Playwright)
+    ├── servidor.mjs
+    ├── prueba-logica.mjs
+    ├── prueba-repo.mjs
+    ├── prueba-selectores.mjs
+    ├── prueba-navegador.mjs
+    ├── prueba-accesibilidad.mjs
+    ├── prueba-arquitectura.mjs
+    ├── prueba-enlaces.mjs
+    ├── prueba-html.mjs
+    └── prueba-responsive.mjs
 ```
 
-### Separación de responsabilidades (modelo / vista / controlador)
+### Explicación técnica
 
-| Capa | Archivo | Qué hace |
+#### Patrón MVC y modularidad en frontend
+
+El proyecto aplica el **patrón Modelo–Vista–Controlador (MVC)** utilizando **módulos JavaScript ES6+** (`import`/`export`). La separación de responsabilidades se mantiene dentro de los archivos existentes, sin modificar la estructura de carpetas:
+
+| Capa | Archivos | Responsabilidades |
 |---|---|---|
-| Modelo | `repo.js`, `indexeddb.js`, `storage.js` | Trae los JSON, guarda el catálogo, registra pedidos y aplica los cambios del administrador |
-| Vista | `view.js`, `carrito-panel.js` | Construye el HTML de las tarjetas, los mensajes y el panel lateral del carrito |
-| Controlador | `app.js`, `cart.js`, `auth.js`, `validation.js`, `admin.js` | Escucha eventos, coordina y actualiza la vista |
+| **Modelo** | `js/repo.js`, `js/indexeddb.js`, `js/storage.js`, `js/cart.js`, `js/auth.js` | Gestión de datos, carga desde JSON con **Fetch API**, persistencia (`localStorage`, `sessionStorage`, **cookies**, **IndexedDB**), estado del carrito, cálculo de totales, gestión de sesión y usuarios. |
+| **Vista** | `js/view.js`, `js/carrito-panel.js`, `assets/js/identidad.js` | Generación y actualización de la interfaz HTML, presentación de tarjetas, renderizado del panel lateral, gestión del foco y elementos visuales. No modifican datos ni reglas de negocio. |
+| **Controlador** | `js/app.js`, `js/admin.js` | Escucha **eventos** del DOM, coordina Modelo y Vista, aplica **validaciones** (HTML5 + JavaScript + expresiones regulares) y controla el flujo de la aplicación. |
+
+Los módulos permiten la **modularidad en frontend**, reutilizando funciones y manteniendo cada archivo con responsabilidades bien definidas.
+
+#### JavaScript, DOM y eventos
+
+- Se utiliza **JavaScript ES6+** (funciones, funciones flecha, clases, promesas, `async/await`).
+- Manipulación del **DOM** para renderizar contenido dinámico y actualizar la interfaz.
+- Gestión de **eventos** (clic, teclado, submit, input, `IntersectionObserver`) para controlar la navegación activa, el menú móvil, el panel lateral, el carrito y los formularios.
+
+#### Carga de datos
+
+- Los archivos `data/*.json` se cargan mediante **Fetch API** (`async/await`).
+- Se aplica una **experiencia progresiva**: si Fetch falla, se lee la copia almacenada en **IndexedDB** para mostrar el catálogo disponible.
 
 ---
 
-## Funcionamiento
+## Funcionamiento del catálogo y carrito
 
-### Cliente
+### Área pública / Cliente
 
-- **Encabezado y navegación:** el encabezado es **fijo** (`position: sticky`) y de altura **cómoda
-  pero moderada**: crece con el ancho de pantalla (logo, enlaces y botones con más aire), gana una
-  sombra sutil al hacer scroll y marca con amarillo la sección visible (navegación activa con
-  `IntersectionObserver`). Los enlaces son anclas de la misma página: `#inicio`, `#planes`,
-  `#tienda`, `#clases`, `#rutinas`, `#nutricion` y `#contacto`. En móvil el menú es un **panel
-  flotante** bajo el encabezado (no ocupa la pantalla ni empuja el contenido) que se cierra con
-  Escape, al elegir una sección, con el botón o al hacer clic fuera.
-- **Página única:** `index.html` reúne el hero, los planes, la tienda, las clases, las rutinas,
-  la nutrición y el contacto. La página de nutrición (`cliente/nutricion.html`) sigue disponible
-  para solicitar la cita.
-- **Planes:** los 3 planes con sus beneficios. El botón «Elegir plan» agrega el plan al carrito
-  (id `plan-<id>`, tipo `plan`) y abre el panel lateral, **sin exigir sesión**.
-- **Clases:** una tarjeta por actividad con su foto, descripción, todos sus horarios agrupados
-  (día y hora), el lugar y el entrenador. En móvil se ve una por fila y en escritorio dos por fila.
-- **Tienda:** el catálogo se organiza en **secciones por categoría** (Suplementos, Ropa) generadas
-  desde el propio JSON; cada sección tiene su título y su cuadrícula, y cada tarjeta permite
-  agregar al carrito. No hay buscador ni filtros.
-- **Carrito:** el carrito es un **panel lateral** disponible en todo el sitio, con control de
-  cantidad, eliminar línea, vaciar, subtotal y total. **Agregar al carrito no exige sesión.** Se
-  guarda en `localStorage`, por lo que sobrevive a la recarga y al cambio de página.
-- **Finalizar compra:** exige sesión. Sin sesión se abre un **modal de acceso**
-  dentro de la propia página; **el carrito no se vacía nunca** mientras la persona se autentica.
-  Con sesión se llega a `cliente/checkout.html`.
-- **Checkout:** datos del cliente (autocompletados desde la sesión), resumen del pedido y
-  confirmación con código de pedido y punto de retiro. El pedido queda en `localStorage` y en
-  IndexedDB, y solo entonces se vacía el carrito. Un plan comprado se registra además como
-  suscripción del cliente. Sin sesión, la URL del checkout devuelve al login.
-- **Nutrición:** información del servicio (sin precio) y formulario de cita.
-- **Login y registro:** login de clientes contra la colección local de `data/gimnasio.json`, con
-  registro opcional que queda guardado en el navegador.
+- **Página única:** `index.html` reúne las secciones `#inicio`, `#planes`, `#tienda`, `#clases`, `#rutinas`, `#nutricion`, `#contacto`. También existen las páginas independientes `cliente/nutricion.html`, `cliente/login.html` y `cliente/checkout.html`.
+- **Catálogo de productos:** se cargan desde `data/productos.json` mediante **Fetch API**, con un total de **10 productos** organizados por **categorías** (Suplementos, Ropa y Accesorios). Se renderizan dinámicamente con `js/view.js`. No hay buscador ni filtros.
+- **Planes:** se cargan desde `data/planes.json`. El botón «Elegir plan» agrega el plan al carrito (tipo `plan`), sin exigir sesión, y abre el panel lateral.
+- **Clases:** se cargan desde `data/clases.json` y `data/entrenadores.json`, mostrando horarios agrupados por actividad, lugar y entrenador.
+- **Carrito (panel lateral):** disponible en todo el sitio. Permite **añadir**, **aumentar/disminuir cantidad**, **eliminar línea**, **vaciar carrito**, ver subtotal y total. El estado del carrito se gestiona en `js/cart.js` y se guarda en **localStorage**, por lo que persiste al recargar o cambiar de página.
+- **Finalizar compra:** exige sesión. Si no hay sesión, se abre un **modal de acceso** dentro de la misma página y **el carrito no se vacía** mientras se autentica. Con sesión, se redirige a `cliente/checkout.html`.
+- **Checkout:** muestra los datos del cliente (autocompletados desde la sesión), el resumen del pedido, validación de los datos y, al confirmar, genera un código de pedido. El pedido se guarda en **localStorage** e **IndexedDB** (almacén `pedidos`), y solo entonces se vacía el carrito. Si el pedido incluye un plan, se registra como suscripción del cliente. Sin sesión, el acceso al checkout redirige a `cliente/login.html`.
+- **Nutrición:** formulario de cita de asesoría nutricional (sin precio publicado). Las citas se almacenan localmente.
+- **Login y registro:** autenticación local de clientes usando `data/gimnasio.json` como referencia, con registro opcional guardado en el navegador.
+
+### Área administrativa
+
+- Acceso desde `admin/login.html`. Solo usuarios con rol `admin` pueden acceder al dashboard.
+- **Dashboard** (`admin/index.html`): muestra totales y las citas de nutrición registradas.
+- **Productos** (`admin/productos.html`): agregar, editar, eliminar y restablecer catálogo.
+- **Planes** (`admin/planes.html`): editar nombre, precio y descripción.
+- **Clases** (`admin/clases.html`): modificar día, hora de inicio, hora de fin y entrenador.
+- **Entrenadores** (`admin/entrenadores.html`): actualizar especialidad y descripción.
+
+Los cambios realizados desde el área administrativa se aplican sobre el catálogo mediante `js/repo.js`, quedando reflejados en la vista pública.
 
 ### Administrador
 
@@ -215,17 +202,18 @@ El login es académico: no es autenticación real de producción.
 
 ---
 
-## Persistencia
+## Persistencia (Web Storage, cookies e IndexedDB)
+
+Se utiliza persistencia en el navegador sin backend remoto:
 
 | Mecanismo | Uso |
 |---|---|
-| `localStorage` | Carrito de compras, cambios del administrador, citas de nutrición, **pedidos confirmados**, registros de clientes y mensajes de contacto |
-| `sessionStorage` | Sesión del usuario (nombre, correo, rol, nivel) y paso pendiente del checkout |
-| `IndexedDB` | Catálogo (`productos`, `planes`, `clases`, `entrenadores`) y registros (`citas`, `pedidos`), como copia local del sitio |
-| Cookies | Preferencia del aviso de cookies y marca de última actualización del catálogo |
+| **localStorage** | Carrito de compras, cambios realizados desde el área administrativa, citas de nutrición, **pedidos confirmados**, registros de clientes y mensajes de contacto. |
+| **sessionStorage** | Sesión del usuario (nombre, correo, rol, nivel) y paso pendiente del checkout. |
+| **IndexedDB** | Copia local del catálogo (`productos`, `planes`, `clases`, `entrenadores`) y registros (`citas`, `pedidos`). Base de datos: **`PlanetaFitnessDB`** (versión 2), con almacén `pedidos`. |
+| **Cookies** | Preferencia del aviso de cookies y marca de la última actualización del catálogo. |
 
-La base local es `PlanetaFitnessDB` en su **versión 2**, que añadió el almacén `pedidos` para el
-checkout.
+**Experiencia progresiva:** al cargar, se intenta obtener los JSON con **Fetch API**. Si la respuesta es correcta, se guarda el catálogo en **IndexedDB**. Si Fetch falla (servidor no disponible), se lee la copia guardada en **IndexedDB** para mostrar el catálogo, informando el origen con `aria-live`.
 
 ### Experiencia progresiva
 
@@ -255,35 +243,42 @@ El pie de página muestra «Catálogo actualizado: …» con la fecha en formato
 
 ---
 
-## Accesibilidad
+## Validaciones
 
-- **HTML semántico:** un solo `<main>` por página, un solo `<h1>`, jerarquía ordenada de encabezados
-  y `<article>` para cada producto, plan, clase o entrenador.
-- **ARIA solo cuando hace falta:** `aria-live="polite"` para mensajes dinámicos, `aria-busy` en los
-  contenedores que cargan datos, `aria-invalid` y `aria-describedby` en los campos con error.
-- **Teclado:** todo se opera con Tab, Shift+Tab, Enter y Espacio. El menú móvil y el carrito son
-  botones accesibles. El panel lateral y el modal de acceso son diálogos (`role="dialog"` con
-  `aria-modal="true"`) que confinan el foco con Tab, se cierran con Escape o con la capa oscura y
-  devuelven el foco al botón que los abrió.
+### Formularios, validaciones y expresiones regulares
+
+Se aplican **validaciones en dos capas** para garantizar la correcta entrada de datos:
+
+1. **Validación HTML5 nativa:** atributos `required`, `type`, `minlength`, `maxlength`, `pattern`, `inputmode` y uso de `checkValidity()`.
+2. **Validación con JavaScript + Expresiones Regulares:** implementada en `js/validation.js`, utilizando `setCustomValidity()` y reglas específicas para cada formulario.
+
+Reglas aplicadas (con expresiones regulares):
+
+- **Nombre y apellidos:** validación de formato de texto (`validarNombre`).
+- **Cédula de identidad (Ecuador):** validación de 10 dígitos (`validarCedula`).
+- **Teléfono/celular:** debe iniciar con `09` y tener 10 dígitos (`validarTelefono`).
+- **Correo electrónico:** validación HTML5 y verificación de formato.
+- **Contraseña:** debe contener letras y números (`validarContrasena`).
+- **Confirmación de contraseña:** comparación obligatoria (`validarCoincidencia`).
+- **Fechas:** no se permiten fechas pasadas en citas de nutrición (`validarFechaFutura`).
+- **Campos obligatorios y mensajes de ayuda:** cada campo cuenta con su `<label>`, mensaje de ayuda vinculado con `aria-describedby` y mensajes de error con `role="alert"`.
+
+La validación se ejecuta tanto en `blur/input` como al enviar el formulario. Tras corregir un error, el mensaje se actualiza correctamente.
+
+## Accesibilidad web (WCAG), ARIA y navegación por teclado
+
+Se aplican principios de **accesibilidad web (WCAG)**:
+
+- **HTML semántico:** un solo `<main>` por página, un solo `<h1>`, jerarquía ordenada de encabezados y `<article>` para cada producto, plan, clase o entrenador.
+- **ARIA:** uso de `aria-live="polite"` para mensajes dinámicos, `aria-busy` en contenedores que cargan datos, `aria-invalid` y `aria-describedby` en campos con error, `aria-current="location"` en enlace activo y `aria-modal="true"` en panel lateral y modal de acceso.
+- **Navegación por teclado:** completamente operable con `Tab`, `Shift+Tab`, `Enter` y `Espacio`.
+- **Gestión del foco:** el panel lateral y el modal de acceso confinan el foco dentro del diálogo, se cierran con `Escape` o con la capa oscura y devuelven el foco al botón que los abrió.
 - **Foco visible:** `:focus-visible` con contorno de 3 px y `outline-offset`.
-- **Contraste:** texto oscuro sobre fondos claros o blanco sobre fondos oscuros, por encima de 4.5:1
-  para texto normal.
-- **Textos alternativos:** todas las imágenes informativas tienen `alt` descriptivo; las decorativas
-  usan `alt=""`.
-- **Errores sin depender del color:** cada mensaje de error incluye el símbolo de advertencia ⚠ y
-  explica qué está mal y cómo corregirlo.
-- **Zoom:** el sitio no genera desplazamiento horizontal al aumentar el zoom.
+- **Contraste:** colores que cumplen con una relación mínima superior a 4.5:1 para texto normal.
+- **Textos alternativos:** todas las imágenes informativas tienen `alt` descriptivo; las decorativas usan `alt=""`.
+- **Mensajes de error sin depender del color:** incluyen el símbolo de advertencia `⚠` y explican qué está mal y cómo corregirlo.
+- **Zoom:** sin desbordamiento horizontal al aumentar el zoom.
 - **Movimiento reducido:** `@media (prefers-reduced-motion: reduce)` desactiva animaciones.
-
-### Formularios
-
-Cada campo tiene su `<label>`, los mensajes de ayuda están cerca del campo y vinculados con
-`aria-describedby`, y los errores se crean con `role="alert"`. La validación se hace en dos capas:
-
-1. **HTML5 nativo:** `required`, `type`, `minlength`, `pattern`, `inputmode` y `checkValidity()`.
-2. **JavaScript:** reglas de negocio con expresiones regulares y `setCustomValidity()`
-   (cédula de 10 dígitos, celular que empieza por 09, contraseña con letras y números,
-   comparación de contraseñas y fechas no pasadas).
 
 ---
 
@@ -334,10 +329,9 @@ propios del proyecto.
 
 ---
 
-## Cómo ejecutar el proyecto
+## Instrucciones de uso
 
-El proyecto usa módulos ES (`type="module"`), por lo que **no funciona** abriendo el archivo con
-`file://`. Hay que servirlo por HTTP.
+El proyecto utiliza **módulos JavaScript ES6+** (`type="module"`), por lo que **no funciona** abriendo los archivos directamente con `file://`. Es necesario servirlo mediante un servidor HTTP.
 
 ### Opción 1: Live Server (VS Code)
 
@@ -345,17 +339,24 @@ El proyecto usa módulos ES (`type="module"`), por lo que **no funciona** abrien
 2. Instalar la extensión **Live Server**.
 3. Clic derecho en `index.html` → **Open with Live Server**.
 
-### Opción 2: desde la terminal
+### Opción 2: Desde la terminal
 
 ```bash
-# Con Python
+# Con Python 3
 python -m http.server 5500
 
 # Con Node.js
 npx serve .
 ```
 
-Luego abrir `http://localhost:5500` (o el puerto que indique el servidor).
+Abrir `http://localhost:5500` (o el puerto indicado por el servidor).
+
+### Cuentas de prueba (para fines académicos)
+
+- **Cliente:** `cliente@planetafitness.ec` / `cliente123`
+- **Administrador:** `admin@planetafitness.ec` / `admin123`
+
+Estas credenciales se encuentran en `data/gimnasio.json` y se utilizan únicamente para demostración académica. No constituyen autenticación real de producción.
 
 ---
 
@@ -370,39 +371,48 @@ Luego abrir `http://localhost:5500` (o el puerto que indique el servidor).
 
 ---
 
-## Pruebas realizadas
+## Pruebas y CI/CD
 
-Las pruebas son archivos de Node sin dependencias: se ejecutan desde la raíz del proyecto.
+### Pruebas realizadas
+
+Las pruebas son archivos de Node.js sin dependencias del sitio web. Se ejecutan desde la raíz del proyecto:
 
 ```bash
-node pruebas/prueba-logica.mjs      # 16 comprobaciones: carrito y validaciones
-node pruebas/prueba-repo.mjs        # 10 comprobaciones: Fetch, merging y respaldo
-node pruebas/prueba-selectores.mjs  # 39 comprobaciones: selectores, anclas e imágenes
-node pruebas/prueba-navegador.mjs   # 124 comprobaciones: flujo real con Playwright
+node pruebas/prueba-logica.mjs        # Carrito y validaciones
+node pruebas/prueba-repo.mjs          # Fetch, merging y respaldo en IndexedDB
+node pruebas/prueba-selectores.mjs    # Selectores, anclas e imágenes existentes
+node pruebas/prueba-accesibilidad.mjs # Accesibilidad
+node pruebas/prueba-arquitectura.mjs  # Arquitectura
+node pruebas/prueba-enlaces.mjs      # Enlaces
+node pruebas/prueba-html.mjs          # HTML
+node pruebas/prueba-responsive.mjs   # Responsive
+node pruebas/prueba-navegador.mjs     # Flujo real con Playwright
 ```
 
-`prueba-navegador.mjs` levanta su propio servidor estático (`pruebas/servidor.mjs`) y necesita
-Playwright, que es una dependencia de las pruebas y no del sitio. Si quieres instalarlo aquí:
+`prueba-navegador.mjs` levanta su propio servidor estático (`pruebas/servidor.mjs`) y utiliza **Playwright** (dependencia exclusiva de las pruebas, no del sitio). Para ejecutarla:
 
 ```bash
 npm install playwright && npx playwright install chromium
 node pruebas/prueba-navegador.mjs
 ```
 
-Si prefieres no instalar nada dentro de la carpeta del proyecto, usa una instalación externa
-y apunta `PW_MODULO` a ella:
+Si se desea usar una instalación externa, se puede apuntar con la variable `PW_MODULO`:
 
 ```bash
 set PW_MODULO=C:\ruta\node_modules\playwright\index.js
 node pruebas/prueba-navegador.mjs
 ```
 
+### Integración continua (CI/CD)
+
+El repositorio incluye un archivo de workflow en `.github/workflows/` con el objetivo de automatizar la verificación básica del proyecto. Esto se realiza únicamente con herramientas disponibles en el entorno académico, sin añadir dependencias innecesarias al proyecto.
+
 ### Cobertura funcional
 
-- [x] Página única con anclas: 3 planes, 5 productos, 2 clases, 3 entrenadores, 5 sesiones de
+- [x] Página única con anclas: 3 planes, 10 productos, 2 clases, 3 entrenadores, 5 sesiones de
       horario, 6 servicios, 3 niveles y 3 horarios de atención.
-- [x] Catálogo de 5 productos agrupado en secciones por categoría (Suplementos, Ropa), generadas
-      desde el JSON, sin buscador ni filtros.
+- [x] Catálogo de 10 productos agrupado en secciones por categoría (Suplementos, Ropa, Accesorios),
+      generado desde el JSON, sin buscador ni filtros.
 - [x] Carrito lateral: agregar desde la tienda y desde los planes, cambiar cantidad, eliminar,
       vaciar y recargar la página.
 - [x] Panel lateral del carrito en todas las páginas del cliente: se abre, se cierra con Escape,
@@ -445,9 +455,22 @@ node pruebas/prueba-navegador.mjs
 
 ---
 
+## Publicación en GitHub Pages
+
+Para publicar el proyecto en **GitHub Pages**:
+
+1. Crear un repositorio en [GitHub](https://github.com/) con el nombre del proyecto.
+2. Subir todos los archivos respetando la estructura de carpetas completa (`index.html` en la raíz, junto a `assets/`, `data/`, `js/`, `cliente/`, `admin/` y `pruebas/`).
+3. En el repositorio, ir a **Settings > Pages**.
+4. En **Branch**, seleccionar la rama principal (`main` o `master`) y la carpeta `/ (root)`.
+5. Guardar los cambios. GitHub Pages generará la URL pública del sitio (por ejemplo: `https://usuario.github.io/nombre-repositorio/`).
+6. Verificar que la carga de archivos JSON funciona correctamente mediante **Fetch API** (servido por HTTP).
+
+**Importante:** al tratarse de un sitio con módulos ES (`type="module"`), debe servirse por HTTPS/HTTP en GitHub Pages (no con `file://`).
+
 ## Entrega
 
-- Proyecto comprimido en `.zip` con la estructura completa.
-- `README.md` incluido.
-- Prueba local con un servidor HTTP.
-- Publicación en Neocities.
+- Proyecto completo con su estructura original.
+- `README.md` actualizado y alineado con los contenidos de las semanas 1 a 6.
+- Verificación local mediante servidor HTTP.
+- Preparado para su publicación en **GitHub Pages**.
